@@ -45,7 +45,9 @@ class _LifecycleWidgetState extends State<LifecycleWidget>
         Route<dynamic> route = ModalRoute.of<dynamic>(context);
         if (route.isFirst) {
           _shouldPopSystem = true;
-          widget.tracker.trackPauseRoute(route: route);
+          if (route.isCurrent) {
+            widget.tracker.trackPauseRoute(route: route);
+          }
           widget.tracker.trackStopRoute(route: route);
         }
       }
