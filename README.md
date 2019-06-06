@@ -1,6 +1,40 @@
 # fake_lifecycle
 
-A new Flutter package.
+[![Build Status](https://cloud.drone.io/api/badges/v7lin/fake_lifecycle/status.svg)](https://cloud.drone.io/v7lin/fake_lifecycle)
+[![Codecov](https://codecov.io/gh/v7lin/fake_lifecycle/branch/master/graph/badge.svg)](https://codecov.io/gh/v7lin/fake_lifecycle)
+[![GitHub Tag](https://img.shields.io/github/tag/v7lin/fake_lifecycle.svg)](https://github.com/v7lin/fake_lifecycle/releases)
+[![Pub Package](https://img.shields.io/pub/v/fake_lifecycle.svg)](https://pub.dartlang.org/packages/fake_lifecycle)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/v7lin/fake_lifecycle/blob/master/LICENSE)
+
+A powerful package for Flutter.
+
+## flutter
+
+* 重点
+
+````
+# 请勿使用 Navigator 的以下几种方式路由
+pushAndRemoveUntil
+pushNamedAndRemoveUntil
+removeRoute
+removeRouteBelow
+`````
+
+* snapshot
+
+````
+dependencies:
+  fake_lifecycle:
+    git:
+      url: https://github.com/v7lin/fake_lifecycle.git
+````
+
+* release
+
+````
+dependencies:
+  fake_lifecycle: ^${latestTag}
+````
 
 ## Getting Started
 
