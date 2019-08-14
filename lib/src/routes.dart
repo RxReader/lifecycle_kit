@@ -51,7 +51,9 @@ class LifecycleRouteObserver extends RouteObserver<Route<dynamic>> {
       }
     }
     if (route != null) {
-      if (previousRoute == null || previousRoute.isCurrent || _history.indexOf(route) == _history.length - 2) {
+      if (previousRoute == null ||
+          previousRoute.isCurrent ||
+          _history.indexOf(route) == _history.length - 2) {
         _tracker.trackPauseRoute(route: route);
         _tracker.trackStopRoute(route: route);
       }
