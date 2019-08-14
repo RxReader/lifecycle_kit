@@ -13,10 +13,7 @@ A powerful package for Flutter.
 * 重点
 
 ````
-# 请勿使用 Navigator 的以下几种方式路由
-pushAndRemoveUntil
-pushNamedAndRemoveUntil
-removeRoute
+# 请勿使用 Navigator 的以下方式路由
 removeRouteBelow
 `````
 
@@ -35,6 +32,10 @@ dependencies:
 dependencies:
   fake_lifecycle: ^${latestTag}
 ````
+
+* demo
+
+[fake_analytics](https://github.com/v7lin/fake_analytics)
 
 ## Getting Started
 
