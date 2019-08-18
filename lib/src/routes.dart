@@ -25,32 +25,24 @@ class LifecycleRouteObserver extends RouteObserver<Route<dynamic>> {
   @override
   void didPop(Route<dynamic> route, Route<dynamic> previousRoute) {
     super.didPop(route, previousRoute);
-    if (route != null) {
-      _tracker.trackPauseRoute(route: route);
-      _tracker.trackStopRoute(route: route);
-    }
+    _tracker.trackPauseRoute(route: route);
+    _tracker.trackStopRoute(route: route);
     if (previousRoute != null) {
       _tracker.trackResumeRoute(route: previousRoute);
     }
-    if (route != null) {
-      _history.remove(route);
-    }
+    _history.remove(route);
   }
 
   @override
   void didRemove(Route<dynamic> route, Route<dynamic> previousRoute) {
     super.didRemove(route, previousRoute);
-    if ((previousRoute == null && ) || previousRoute.isCurrent) {
+    if ((previousRoute != null && previousRoute.isCurrent) || route == _history.last) {
       _tracker.trackPauseRoute(route: route);
     }
     _tracker.trackStopRoute(route: route);
-
-    if (previousRoute != null) {
-      if (previousRoute.isCurrent) {
-        _tracker.trackResumeRoute(route: previousRoute);
-      }
+    if (previousRoute != null && previousRoute.isCurrent) {
+      _tracker.trackResumeRoute(route: previousRoute);
     }
-
     _history.remove(route);
   }
 
