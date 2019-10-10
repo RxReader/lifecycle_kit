@@ -1,9 +1,6 @@
 library fake_lifecycle;
 
 /// 不支持 Navigator 的以下几种路由
-/// pushAndRemoveUntil
-/// pushNamedAndRemoveUntil
-/// removeRoute
 /// removeRouteBelow
 
 export 'src/routes.dart';

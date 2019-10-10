@@ -34,8 +34,8 @@ class _LifecycleWidgetState extends State<LifecycleWidget>
 
   @override
   void dispose() {
-    super.dispose();
     WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
 
   @override
