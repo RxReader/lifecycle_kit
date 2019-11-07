@@ -1,4 +1,3 @@
-import 'package:meta/meta.dart';
 import 'package:flutter/widgets.dart';
 
 abstract class LifecycleTracker {
