@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:fake_lifecycle/src/tracker.dart';
 import 'package:flutter/widgets.dart';
+import 'package:lifecycle_kit/src/tracker.dart';
 
 class LifecycleWidget extends StatefulWidget {
   LifecycleWidget({
@@ -46,9 +46,9 @@ class _LifecycleWidgetState extends State<LifecycleWidget>
         if (route.isFirst) {
           _shouldPopSystem = true;
           if (route.isCurrent) {
-            widget.tracker.trackPauseRoute(route: route);
+            widget.tracker.trackPause(route: route);
           }
-          widget.tracker.trackStopRoute(route: route);
+          widget.tracker.trackStop(route: route);
         }
       }
       return result;
@@ -64,15 +64,15 @@ class _LifecycleWidgetState extends State<LifecycleWidget>
         /// release 启动首页时候，会先调用一次 resumed
         if (Platform.isAndroid) {
           if (!_isReleaseMode() || !route.isFirst || _lifeResumed) {
-            widget.tracker.trackResumeRoute(route: route);
+            widget.tracker.trackResume(route: route);
           }
         } else {
-          widget.tracker.trackResumeRoute(route: route);
+          widget.tracker.trackResume(route: route);
         }
         _lifeResumed = true;
       } else if (state == AppLifecycleState.paused) {
         if (!_shouldPopSystem) {
-          widget.tracker.trackPauseRoute(route: route);
+          widget.tracker.trackPause(route: route);
         }
       }
     }

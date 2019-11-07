@@ -1,4 +1,4 @@
-library fake_lifecycle;
+library lifecycle_kit;
 
 /// 不支持 Navigator 的以下几种路由
 /// removeRouteBelow

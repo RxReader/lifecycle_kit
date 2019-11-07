@@ -1,5 +1,5 @@
-import 'package:fake_lifecycle/src/tracker.dart';
 import 'package:flutter/widgets.dart';
+import 'package:lifecycle_kit/src/tracker.dart';
 
 class LifecycleRouteObserver extends RouteObserver<Route<dynamic>> {
   LifecycleRouteObserver({
@@ -15,20 +15,20 @@ class LifecycleRouteObserver extends RouteObserver<Route<dynamic>> {
     super.didPush(route, previousRoute);
     previousRoute = _history.isNotEmpty ? _history.last : null;
     if (previousRoute != null) {
-      _tracker.trackPauseRoute(route: previousRoute);
+      _tracker.trackPause(route: previousRoute);
     }
-    _tracker.trackStartRoute(route: route);
-    _tracker.trackResumeRoute(route: route);
+    _tracker.trackStart(route: route);
+    _tracker.trackResume(route: route);
     _history.add(route);
   }
 
   @override
   void didPop(Route<dynamic> route, Route<dynamic> previousRoute) {
     super.didPop(route, previousRoute);
-    _tracker.trackPauseRoute(route: route);
-    _tracker.trackStopRoute(route: route);
+    _tracker.trackPause(route: route);
+    _tracker.trackStop(route: route);
     if (previousRoute != null) {
-      _tracker.trackResumeRoute(route: previousRoute);
+      _tracker.trackResume(route: previousRoute);
     }
     _history.remove(route);
   }
@@ -38,11 +38,11 @@ class LifecycleRouteObserver extends RouteObserver<Route<dynamic>> {
     super.didRemove(route, previousRoute);
     if ((previousRoute != null && previousRoute.isCurrent) ||
         route == _history.last) {
-      _tracker.trackPauseRoute(route: route);
+      _tracker.trackPause(route: route);
     }
-    _tracker.trackStopRoute(route: route);
+    _tracker.trackStop(route: route);
     if (previousRoute != null && previousRoute.isCurrent) {
-      _tracker.trackResumeRoute(route: previousRoute);
+      _tracker.trackResume(route: previousRoute);
     }
     _history.remove(route);
   }
@@ -52,12 +52,12 @@ class LifecycleRouteObserver extends RouteObserver<Route<dynamic>> {
       {@required Route<dynamic> newRoute, @required Route<dynamic> oldRoute}) {
     super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
     if (newRoute.isCurrent) {
-      _tracker.trackPauseRoute(route: oldRoute);
+      _tracker.trackPause(route: oldRoute);
     }
-    _tracker.trackStopRoute(route: oldRoute);
-    _tracker.trackStartRoute(route: newRoute);
+    _tracker.trackStop(route: oldRoute);
+    _tracker.trackStart(route: newRoute);
     if (newRoute.isCurrent) {
-      _tracker.trackResumeRoute(route: newRoute);
+      _tracker.trackResume(route: newRoute);
     }
     _history[_history.indexOf(oldRoute)] = newRoute;
   }

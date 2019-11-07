@@ -1,9 +1,9 @@
-# fake_lifecycle
+# lifecycle_kit
 
 [![Build Status](https://cloud.drone.io/api/badges/v7lin/fake_lifecycle/status.svg)](https://cloud.drone.io/v7lin/fake_lifecycle)
 [![Codecov](https://codecov.io/gh/v7lin/fake_lifecycle/branch/master/graph/badge.svg)](https://codecov.io/gh/v7lin/fake_lifecycle)
 [![GitHub Tag](https://img.shields.io/github/tag/v7lin/fake_lifecycle.svg)](https://github.com/v7lin/fake_lifecycle/releases)
-[![Pub Package](https://img.shields.io/pub/v/fake_lifecycle.svg)](https://pub.dartlang.org/packages/fake_lifecycle)
+[![Pub Package](https://img.shields.io/pub/v/lifecycle_kit.svg)](https://pub.dartlang.org/packages/lifecycle_kit)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/v7lin/fake_lifecycle/blob/master/LICENSE)
 
 A powerful package for Flutter.
@@ -21,7 +21,7 @@ removeRouteBelow
 
 ````
 dependencies:
-  fake_lifecycle:
+  lifecycle_kit:
     git:
       url: https://github.com/v7lin/fake_lifecycle.git
 ````
@@ -30,12 +30,12 @@ dependencies:
 
 ````
 dependencies:
-  fake_lifecycle: ^${latestTag}
+  lifecycle_kit: ^${latestTag}
 ````
 
 * demo
 
-[fake_analytics](https://github.com/v7lin/fake_analytics)
+[flutter analytics](https://github.com/v7lin/fake_analytics)
 
 ## Getting Started
 

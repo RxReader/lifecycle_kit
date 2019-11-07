@@ -1,23 +1,21 @@
-name: fake_lifecycle
+name: lifecycle_kit
 description: A powerful package for Flutter.
-version: 0.1.4
+version: 1.0.0
 author: v7lin <v7lin@qq.com>
 homepage: https://github.com/v7lin/fake_lifecycle
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.3.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
-  meta: '>=1.1.6 <2.0.0'
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  pedantic: '>=1.4.0 <3.0.0'
+  pedantic:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec

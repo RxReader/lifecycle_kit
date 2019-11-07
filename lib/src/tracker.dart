@@ -2,11 +2,11 @@ import 'package:meta/meta.dart';
 import 'package:flutter/widgets.dart';
 
 abstract class LifecycleTracker {
-  void trackStartRoute({@required Route<dynamic> route});
+  void trackStart({@required Route<dynamic> route});
 
-  void trackResumeRoute({@required Route<dynamic> route});
+  void trackResume({@required Route<dynamic> route});
 
-  void trackPauseRoute({@required Route<dynamic> route});
+  void trackPause({@required Route<dynamic> route});
 
-  void trackStopRoute({@required Route<dynamic> route});
+  void trackStop({@required Route<dynamic> route});
 }
