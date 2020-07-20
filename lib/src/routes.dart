@@ -1,7 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:lifecycle_kit/src/tracker.dart';
 
-class LifecycleRouteObserver extends RouteObserver<Route<dynamic>> {
+class LifecycleRouteObserver<R extends Route<dynamic>>
+    extends RouteObserver<R> {
   LifecycleRouteObserver({
     @required LifecycleTracker tracker,
   })  : assert(tracker != null),

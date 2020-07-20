@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:lifecycle_kit/src/tracker.dart';
 
 class LifecycleWidget extends StatefulWidget {
-  LifecycleWidget({
+  const LifecycleWidget({
     Key key,
     @required this.tracker,
     @required this.child,
