@@ -1,3 +1,8 @@
+## 2.0.0
+
+* 添加 example
+* 该用 trackActive/trackInactive
+
 ## 1.1.0
 
 * 优化路由

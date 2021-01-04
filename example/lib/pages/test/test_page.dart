@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:lifecycle_kit/lifecycle_kit.dart';
 import 'package:lifecycle_kit_example/app/app.dart';
-import 'package:lifecycle_kit_example/app/app.manifest.g.dart';
 import 'package:lifecycle_kit_example/pages/not_found/not_found_page.dart';
 import 'package:router_annotation/router_annotation.dart' as rca;
 
@@ -75,9 +73,9 @@ class TestPage extends StatelessWidget {
             },
           ),
           ListTile(
-            title: const Text('removeRouteBelow - 不支持'),
+            title: const Text('removeRouteBelow'),
             onTap: () {
-              throw UnsupportedError('LifecycleObserver 不支持');
+              Navigator.of(context).removeRouteBelow(ModalRoute.of<dynamic>(context));
             },
           ),
           ListTile(
