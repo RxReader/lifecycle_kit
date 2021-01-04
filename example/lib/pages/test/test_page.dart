@@ -75,7 +75,8 @@ class TestPage extends StatelessWidget {
           ListTile(
             title: const Text('removeRouteBelow'),
             onTap: () {
-              Navigator.of(context).removeRouteBelow(ModalRoute.of<dynamic>(context));
+              Navigator.of(context)
+                  .removeRouteBelow(ModalRoute.of<dynamic>(context));
             },
           ),
           ListTile(

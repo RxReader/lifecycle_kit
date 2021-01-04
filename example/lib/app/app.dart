@@ -34,8 +34,7 @@ class AppState extends State<App> {
         return;
       }
       if (kDebugMode) {
-        print(
-            'onActive - ${route.settings.name} - ${route.hashCode}');
+        print('onActive - ${route.settings.name} - ${route.hashCode}');
       }
     },
     onInactive: (Route<dynamic> route) {
@@ -43,8 +42,7 @@ class AppState extends State<App> {
         return;
       }
       if (kDebugMode) {
-        print(
-            'onInactive - ${route.settings.name} - ${route.hashCode}');
+        print('onInactive - ${route.settings.name} - ${route.hashCode}');
       }
     },
   );
