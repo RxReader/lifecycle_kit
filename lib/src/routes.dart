@@ -14,22 +14,23 @@ class LifecycleRouteObserver<R extends Route<dynamic>>
   @override
   void didPush(Route<dynamic> route, Route<dynamic> previousRoute) {
     super.didPush(route, previousRoute);
-    previousRoute = _history.isNotEmpty ? _history.last : null;
-    if (previousRoute != null) {
-      _tracker.trackPause(route: previousRoute);
+    // previousRoute = _history.isNotEmpty ? _history.last : null;
+    if (previousRoute == null) {
+      print('fuck: ${route.settings.name}');
     }
-    _tracker.trackStart(route: route);
-    _tracker.trackResume(route: route);
+    if (previousRoute != null) {
+      _tracker.trackInactive(route: previousRoute);
+    }
+    _tracker.trackActive(route: route);
     _history.add(route);
   }
 
   @override
   void didPop(Route<dynamic> route, Route<dynamic> previousRoute) {
     super.didPop(route, previousRoute);
-    _tracker.trackPause(route: route);
-    _tracker.trackStop(route: route);
+    _tracker.trackInactive(route: route);
     if (previousRoute != null) {
-      _tracker.trackResume(route: previousRoute);
+      _tracker.trackActive(route: previousRoute);
     }
     _history.remove(route);
   }
@@ -39,11 +40,10 @@ class LifecycleRouteObserver<R extends Route<dynamic>>
     super.didRemove(route, previousRoute);
     if ((previousRoute != null && previousRoute.isCurrent) ||
         route == _history.last) {
-      _tracker.trackPause(route: route);
+      _tracker.trackInactive(route: route);
     }
-    _tracker.trackStop(route: route);
     if (previousRoute != null && previousRoute.isCurrent) {
-      _tracker.trackResume(route: previousRoute);
+      _tracker.trackActive(route: previousRoute);
     }
     _history.remove(route);
   }
@@ -53,12 +53,10 @@ class LifecycleRouteObserver<R extends Route<dynamic>>
       {@required Route<dynamic> newRoute, @required Route<dynamic> oldRoute}) {
     super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
     if (newRoute.isCurrent) {
-      _tracker.trackPause(route: oldRoute);
+      _tracker.trackInactive(route: oldRoute);
     }
-    _tracker.trackStop(route: oldRoute);
-    _tracker.trackStart(route: newRoute);
     if (newRoute.isCurrent) {
-      _tracker.trackResume(route: newRoute);
+      _tracker.trackActive(route: newRoute);
     }
     _history[_history.indexOf(oldRoute)] = newRoute;
   }

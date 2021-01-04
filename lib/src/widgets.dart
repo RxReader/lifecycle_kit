@@ -21,8 +21,7 @@ class LifecycleWidget extends StatefulWidget {
   }
 }
 
-class _LifecycleWidgetState extends State<LifecycleWidget>
-    with WidgetsBindingObserver {
+class _LifecycleWidgetState extends State<LifecycleWidget> with WidgetsBindingObserver {
   bool _lifeResumed = false;
   bool _shouldPopSystem = false;
 
@@ -46,9 +45,8 @@ class _LifecycleWidgetState extends State<LifecycleWidget>
         if (route.isFirst) {
           _shouldPopSystem = true;
           if (route.isCurrent) {
-            widget.tracker.trackPause(route: route);
+            widget.tracker.trackInactive(route: route);
           }
-          widget.tracker.trackStop(route: route);
         }
       }
       return result;
@@ -64,15 +62,16 @@ class _LifecycleWidgetState extends State<LifecycleWidget>
         /// release 启动首页时候，会先调用一次 resumed
         if (Platform.isAndroid) {
           if (!_isReleaseMode() || !route.isFirst || _lifeResumed) {
-            widget.tracker.trackResume(route: route);
+            widget.tracker.trackActive(route: route);
           }
         } else {
-          widget.tracker.trackResume(route: route);
+          widget.tracker.trackActive(route: route);
         }
         _lifeResumed = true;
-      } else if (state == AppLifecycleState.paused) {
+      } else if (state == AppLifecycleState.inactive) {
+        // AppLifecycleState.paused
         if (!_shouldPopSystem) {
-          widget.tracker.trackPause(route: route);
+          widget.tracker.trackInactive(route: route);
         }
       }
     }

@@ -10,13 +10,6 @@ A powerful package for Flutter.
 
 ## flutter
 
-* 重点
-
-````
-# 请勿使用 Navigator 的以下方式路由
-removeRouteBelow
-`````
-
 * snapshot
 
 ````
