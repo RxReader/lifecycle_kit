@@ -19,12 +19,19 @@ class LifecycleWidget extends StatefulWidget {
   }
 }
 
-class _LifecycleWidgetState extends State<LifecycleWidget>
-    with WidgetsBindingObserver {
+class _LifecycleWidgetState extends State<LifecycleWidget> with WidgetsBindingObserver {
+  Route<dynamic> _route;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _route ??= ModalRoute.of<dynamic>(context);
   }
 
   @override
@@ -36,13 +43,12 @@ class _LifecycleWidgetState extends State<LifecycleWidget>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
-    Route<dynamic> route = ModalRoute.of<dynamic>(context);
-    if (route.isCurrent) {
+    if (_route?.isCurrent ?? false) {
       if (state == AppLifecycleState.resumed) {
-        widget.tracker.trackActive(route: route);
+        widget.tracker.trackActive(route: _route);
       } else if (state == AppLifecycleState.inactive) {
         // AppLifecycleState.paused
-        widget.tracker.trackInactive(route: route);
+        widget.tracker.trackInactive(route: _route);
       }
     }
   }
