@@ -8,7 +8,8 @@ class IndicatorTapBuilder extends StatefulWidget {
     @required this.onTap,
   }) : super(key: key);
 
-  final Widget Function(BuildContext context, bool showIndicator, VoidCallback onTap) builder;
+  final Widget Function(
+      BuildContext context, bool showIndicator, VoidCallback onTap) builder;
   final AsyncCallback onTap;
 
   @override
@@ -22,7 +23,8 @@ class _IndicatorTapBuilderState extends State<IndicatorTapBuilder> {
 
   @override
   Widget build(BuildContext context) {
-    return widget.builder(context, _executing, _executing || widget.onTap == null ? null : () => _onTap());
+    return widget.builder(context, _executing,
+        _executing || widget.onTap == null ? null : () => _onTap());
   }
 
   Future<void> _onTap() async {

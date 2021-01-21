@@ -17,7 +17,8 @@ class TodoPage extends StatefulWidget {
   }
 }
 
-class _TodoPageState extends State<TodoPage> with AutomaticKeepAliveClientMixin<TodoPage> {
+class _TodoPageState extends State<TodoPage>
+    with AutomaticKeepAliveClientMixin<TodoPage> {
   @override
   bool get wantKeepAlive => true;
 

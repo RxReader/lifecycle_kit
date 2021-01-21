@@ -25,7 +25,8 @@ class LifecyclePage extends StatefulWidget {
   }
 }
 
-class _LifecyclePageState extends State<LifecyclePage> with RouteAware, WidgetsBindingObserver {
+class _LifecyclePageState extends State<LifecyclePage>
+    with RouteAware, WidgetsBindingObserver {
   //
   int _page;
   int _selectedPage;
@@ -43,7 +44,9 @@ class _LifecyclePageState extends State<LifecyclePage> with RouteAware, WidgetsB
     }
     return _controller.initialPage;
   }
-  bool get _isCurrent => _page != null && _currentPage != null && _currentPage == _page;
+
+  bool get _isCurrent =>
+      _page != null && _currentPage != null && _currentPage == _page;
 
   @override
   void initState() {
@@ -55,14 +58,17 @@ class _LifecyclePageState extends State<LifecyclePage> with RouteAware, WidgetsB
   void didChangeDependencies() {
     super.didChangeDependencies();
     _page ??= context.findAncestorWidgetOfExactType<IndexedSemantics>().index;
-    _controller?.removeListener(_listenPageChange); // TabBarView 的 didChangeDependencies 会频繁创建 PageController
+    _controller?.removeListener(
+        _listenPageChange); // TabBarView 的 didChangeDependencies 会频繁创建 PageController
     _controller = Scrollable.of(context).widget.controller as PageController;
     _controller.addListener(_listenPageChange);
     //
     _route ??= ModalRoute.of(context);
     _pageRoute ??= PageRouteBuilder<dynamic>(
       settings: _route.settings.copyWith(name: widget.routeName),
-      pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) => widget.routeBuilder.call(context),
+      pageBuilder: (BuildContext context, Animation<double> animation,
+              Animation<double> secondaryAnimation) =>
+          widget.routeBuilder.call(context),
     );
     widget.routeObserver.subscribe(this, _route);
   }

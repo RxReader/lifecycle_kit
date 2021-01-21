@@ -34,7 +34,8 @@ class AppState extends State<App> {
         return;
       }
       if (kDebugMode) {
-        print('onActive - ${route.settings.name} - ${AppManifest.names[route.settings.name]} - ${route.hashCode}');
+        print(
+            'onActive - ${route.settings.name} - ${AppManifest.names[route.settings.name]} - ${route.hashCode}');
       }
     },
     onInactive: (Route<dynamic> route) {
@@ -42,11 +43,13 @@ class AppState extends State<App> {
         return;
       }
       if (kDebugMode) {
-        print('onInactive - ${route.settings.name} - ${AppManifest.names[route.settings.name]} - ${route.hashCode}');
+        print(
+            'onInactive - ${route.settings.name} - ${AppManifest.names[route.settings.name]} - ${route.hashCode}');
       }
     },
   );
-  final RouteObserver<Route<dynamic>> _routeObserver = RouteObserver<Route<dynamic>>();
+  final RouteObserver<Route<dynamic>> _routeObserver =
+      RouteObserver<Route<dynamic>>();
 
   LifecycleTracker get tracker => _tracker;
   RouteObserver<Route<dynamic>> get routeObserver => _routeObserver;
@@ -71,10 +74,14 @@ class AppState extends State<App> {
       if (_fadeAnimRoutes.contains(settings.name)) {
         return PageRouteBuilder<dynamic>(
           settings: settings,
-          pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
+          pageBuilder: (BuildContext context, Animation<double> animation,
+              Animation<double> secondaryAnimation) {
             return _routeWidget(context, settings, settings.name);
           },
-          transitionsBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
+          transitionsBuilder: (BuildContext context,
+              Animation<double> animation,
+              Animation<double> secondaryAnimation,
+              Widget child) {
             return FadeTransition(
               opacity: CurvedAnimation(
                 parent: animation,
@@ -86,7 +93,8 @@ class AppState extends State<App> {
         );
       }
       return MaterialPageRoute<dynamic>(
-        builder: (BuildContext context) => _routeWidget(context, settings, settings.name),
+        builder: (BuildContext context) =>
+            _routeWidget(context, settings, settings.name),
         settings: settings,
       );
     }
@@ -95,12 +103,14 @@ class AppState extends State<App> {
 
   Route<dynamic> _onUnknownRoute(RouteSettings settings) {
     return MaterialPageRoute<dynamic>(
-      builder: (BuildContext context) => _routeWidget(context, settings, NotFoundPageProvider.routeName),
+      builder: (BuildContext context) =>
+          _routeWidget(context, settings, NotFoundPageProvider.routeName),
       settings: settings,
     );
   }
 
-  Widget _routeWidget(BuildContext context, RouteSettings settings, String routeName) {
+  Widget _routeWidget(
+      BuildContext context, RouteSettings settings, String routeName) {
     return LifecycleWidget(
       tracker: _tracker,
       child: Builder(
