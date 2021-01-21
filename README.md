@@ -12,23 +12,27 @@ A powerful package for Flutter.
 
 * snapshot
 
-````
+```
 dependencies:
   lifecycle_kit:
     git:
       url: https://github.com/rxreader/lifecycle_kit.git
-````
+```
 
 * release
 
-````
+```
 dependencies:
   lifecycle_kit: ^${latestTag}
-````
+```
 
 * demo
 
-[flutter analytics](https://github.com/v7lin/fake_analytics)
+```shell
+cd example/
+flutter pub run build_runner clean
+flutter pub run build_runner build --delete-conflicting-outputs
+```
 
 ## Getting Started
 

@@ -1,3 +1,8 @@
+## 2.0.1
+
+* 优化
+* 添加 PageView/TabBarView 支持
+
 ## 2.0.0
 
 * 添加 example

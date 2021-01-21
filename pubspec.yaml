@@ -1,8 +1,8 @@
 name: lifecycle_kit
 description: A powerful package for Flutter.
-version: 2.0.0
+version: 2.0.1
 # author: v7lin <v7lin@qq.com>
-homepage: https://github.com/v7lin/fake_lifecycle
+homepage: https://github.com/rxreader/lifecycle_kit
 
 environment:
   sdk: ">=2.3.0 <3.0.0"
