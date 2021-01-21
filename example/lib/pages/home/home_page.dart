@@ -23,6 +23,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final PageController _controller = PageController();
+  int _page = 0;
 
   @override
   void dispose() {
@@ -65,7 +66,11 @@ class _HomePageState extends State<HomePage> {
           ],
           onTap: (int index) {
             _controller.jumpToPage(index);
+            setState(() {
+              _page = index;
+            });
           },
+          currentIndex: _page,
           backgroundColor: Theme.of(context).bottomAppBarTheme.color,
           border: Border.all(
             color: Colors.transparent,
