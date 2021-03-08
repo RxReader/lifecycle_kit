@@ -7,16 +7,16 @@ class RouteTracker implements LifecycleTracker {
     this.onInactive,
   });
 
-  final void Function(Route<dynamic> route) onActive;
-  final void Function(Route<dynamic> route) onInactive;
+  final void Function(Route<dynamic> route)? onActive;
+  final void Function(Route<dynamic> route)? onInactive;
 
   @override
-  void trackActive({Route<dynamic> route}) {
+  void trackActive({required Route<dynamic> route}) {
     onActive?.call(route);
   }
 
   @override
-  void trackInactive({Route<dynamic> route}) {
+  void trackInactive({required Route<dynamic> route}) {
     onInactive?.call(route);
   }
 }

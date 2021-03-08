@@ -9,8 +9,6 @@ part 'todo_page.g.dart';
   routeName: '/todo',
 )
 class TodoPage extends StatefulWidget {
-  const TodoPage({Key key}) : super(key: key);
-
   @override
   State<StatefulWidget> createState() {
     return _TodoPageState();

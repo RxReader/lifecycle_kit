@@ -8,8 +8,6 @@ part 'not_found_page.g.dart';
   routeName: '/not_found',
 )
 class NotFoundPage extends StatelessWidget {
-  const NotFoundPage({Key key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -69,24 +69,24 @@ class TestPage extends StatelessWidget {
           ListTile(
             title: const Text('removeRoute'),
             onTap: () {
-              Navigator.of(context).removeRoute(ModalRoute.of(context));
+              Navigator.of(context).removeRoute(ModalRoute.of(context)!);
             },
           ),
           ListTile(
             title: const Text('removeRouteBelow'),
             onTap: () {
               Navigator.of(context)
-                  .removeRouteBelow(ModalRoute.of<dynamic>(context));
+                  .removeRouteBelow(ModalRoute.of(context)!);
             },
           ),
           ListTile(
             title: const Text('replace/replaceRouteBelow'),
             onTap: () {
               Navigator.of(context).replaceRouteBelow<dynamic>(
-                anchorRoute: ModalRoute.of<dynamic>(context),
+                anchorRoute: ModalRoute.of(context)!,
                 newRoute: App.of(context).onGenerateRoute(const RouteSettings(
                   name: NotFoundPageProvider.routeName,
-                )),
+                ))!,
               );
             },
           ),

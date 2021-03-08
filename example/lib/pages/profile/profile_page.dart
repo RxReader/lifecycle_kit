@@ -8,8 +8,6 @@ part 'profile_page.g.dart';
   routeName: '/profile',
 )
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({Key key}) : super(key: key);
-
   @override
   State<StatefulWidget> createState() {
     return _ProfilePageState();

@@ -13,8 +13,6 @@ part 'home_page.g.dart';
   routeName: Navigator.defaultRouteName,
 )
 class HomePage extends StatefulWidget {
-  const HomePage({Key key}) : super(key: key);
-
   @override
   State<StatefulWidget> createState() {
     return _HomePageState();

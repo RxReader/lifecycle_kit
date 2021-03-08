@@ -3,12 +3,10 @@ import 'package:lifecycle_kit/src/tracker.dart';
 
 class LifecycleWidget extends StatefulWidget {
   const LifecycleWidget({
-    Key key,
-    @required this.tracker,
-    @required this.child,
-  })  : assert(tracker != null),
-        assert(child != null),
-        super(key: key);
+    Key? key,
+    required this.tracker,
+    required this.child,
+  })  : super(key: key);
 
   final LifecycleTracker tracker;
   final Widget child;
@@ -20,12 +18,12 @@ class LifecycleWidget extends StatefulWidget {
 }
 
 class _LifecycleWidgetState extends State<LifecycleWidget> with WidgetsBindingObserver {
-  Route<dynamic> _route;
+  Route<dynamic>? _route;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance!.addObserver(this);
   }
 
   @override
@@ -36,7 +34,7 @@ class _LifecycleWidgetState extends State<LifecycleWidget> with WidgetsBindingOb
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
+    WidgetsBinding.instance!.removeObserver(this);
     super.dispose();
   }
 
@@ -45,10 +43,10 @@ class _LifecycleWidgetState extends State<LifecycleWidget> with WidgetsBindingOb
     super.didChangeAppLifecycleState(state);
     if (_route?.isCurrent ?? false) {
       if (state == AppLifecycleState.resumed) {
-        widget.tracker.trackActive(route: _route);
+        widget.tracker.trackActive(route: _route!);
       } else if (state == AppLifecycleState.inactive) {
         // AppLifecycleState.paused
-        widget.tracker.trackInactive(route: _route);
+        widget.tracker.trackInactive(route: _route!);
       }
     }
   }
