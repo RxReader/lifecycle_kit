@@ -25,7 +25,7 @@ class AppRouter extends ra.Router with Manifest {
   static AppRouter get instance => _instance ??= AppRouter._();
   static AppRouter? _instance;
 
-  Future<dynamic?> pushNamed(BuildContext context, String routeName, {Object? arguments}) {
+  Future<dynamic> pushNamed(BuildContext context, String routeName, {Object? arguments}) {
     final List<ra.Interceptor> activeInterceptors = <ra.Interceptor>[
       ...interceptors,
       if (routeInterceptors.containsKey(routeName)) routeInterceptors[routeName]!,
@@ -40,7 +40,7 @@ class AppRouter extends ra.Router with Manifest {
     return nexts.last.call();
   }
 
-  Future<dynamic?> pushReplacementNamed(BuildContext context, String routeName, {Object? result, Object? arguments}) {
+  Future<dynamic> pushReplacementNamed(BuildContext context, String routeName, {Object? result, Object? arguments}) {
     final List<ra.Interceptor> activeInterceptors = <ra.Interceptor>[
       ...interceptors,
       if (routeInterceptors.containsKey(routeName)) routeInterceptors[routeName]!,
