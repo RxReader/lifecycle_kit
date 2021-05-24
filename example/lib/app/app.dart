@@ -77,12 +77,24 @@ class AppState extends State<App> {
       onGenerateRoute: onGenerateRoute,
       onUnknownRoute: _onUnknownRoute,
       navigatorObservers: <NavigatorObserver>[
+        // LifecycleRouteObserver<Route<dynamic>>(
+        //   tracker: _tracker,
+        // ),
         LifecycleRouteObserver<Route<dynamic>>(
-          tracker: _tracker,
+          tracker: RouteTracker(
+            onInactive: (Route<dynamic> route) => _tracker.trackInactive(route: route),
+          ),
         ),
         _routeObserver,
+        _powerfulRouteObserver,
+        LifecycleRouteObserver<Route<dynamic>>(
+          tracker: RouteTracker(
+            onActive: (Route<dynamic> route) => _tracker.trackActive(route: route),
+          ),
+        ),
       ],
-      title: 'lifecycle_kit',
+      title: 'Lifecycle Kit',
+      theme: ThemeData.light().copyWith(platform: TargetPlatform.iOS),
     );
   }
 

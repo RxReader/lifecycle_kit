@@ -42,20 +42,28 @@ class _LifecyclePageViewState extends State<LifecyclePageView> with PowerfulRout
   late int _selectedIndex;
 
   //
-  late final ModalRoute<dynamic> _route = ModalRoute.of(context)!;
-  late final List<ModalRoute<dynamic>> _pageRoutes = widget.pages.map((LifecyclePage element) {
-    return PageRouteBuilder<dynamic>(
-      settings: _route.settings.copyWith(name: element.routeName),
-      pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) => element.routeBuilder.call(context),
-    );
-  }).toList();
-  late final PowerfulRouteObserver<Route<dynamic>> _routeObserver = widget.routeObserver..subscribe(this, _route);
+  late final ModalRoute<dynamic> _route;
+  late final List<ModalRoute<dynamic>> _pageRoutes;
+  late final PowerfulRouteObserver<Route<dynamic>> _routeObserver;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addObserver(this);
     _selectedIndex = widget.controller.initialPage;
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _route = ModalRoute.of(context)!;
+    _pageRoutes = widget.pages.map((LifecyclePage element) {
+      return PageRouteBuilder<dynamic>(
+        settings: _route.settings.copyWith(name: element.routeName),
+        pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) => element.routeBuilder.call(context),
+      );
+    }).toList();
+    _routeObserver = widget.routeObserver..subscribe(this, _route);
   }
 
   @override
