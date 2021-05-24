@@ -32,21 +32,19 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: PageView(
+      body: LifecyclePageView(
+        tracker: App.of(context).tracker,
+        routeObserver: App.of(context).powerfulRouteObserver,
         controller: _controller,
         physics: const NeverScrollableScrollPhysics(),
-        children: <Widget>[
+        pages: <LifecyclePage>[
           LifecyclePage(
-            tracker: App.of(context).tracker,
             routeName: TodoPageProvider.routeName,
             routeBuilder: TodoPageProvider.routeBuilder,
-            routeObserver: App.of(context).routeObserver,
           ),
           LifecyclePage(
-            tracker: App.of(context).tracker,
             routeName: ProfilePageProvider.routeName,
             routeBuilder: ProfilePageProvider.routeBuilder,
-            routeObserver: App.of(context).routeObserver,
           ),
         ],
       ),

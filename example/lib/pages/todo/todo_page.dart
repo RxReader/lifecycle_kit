@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lifecycle_kit_example/app/app_router.dart';
 import 'package:lifecycle_kit_example/pages/test/test_page.dart';
 import 'package:router_annotation/router_annotation.dart' as rca;
 
@@ -32,7 +33,7 @@ class _TodoPageState extends State<TodoPage>
           ListTile(
             title: const Text('Test'),
             onTap: () {
-              TestPageProvider.pushByNamed(context);
+              AppRouter.instance.pushNamed(context, TestPageProvider.routeName);
             },
           ),
         ],

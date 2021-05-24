@@ -1,12 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lifecycle_kit/lifecycle_kit.dart';
-import 'package:lifecycle_kit_example/app/app.manifest.g.dart';
 import 'package:lifecycle_kit_example/app/app_router.dart';
+import 'package:lifecycle_kit_example/pages/home/home_page.dart';
 import 'package:lifecycle_kit_example/pages/not_found/not_found_page.dart';
-import 'package:router_annotation/router_annotation.dart' as rca;
+import 'package:lifecycle_kit_example/widgets/routes.dart';
 
-@rca.Manifest()
 class App extends StatefulWidget {
   const App({Key? key}) : super(key: key);
 
@@ -27,34 +26,54 @@ class App extends StatefulWidget {
 
 class AppState extends State<App> {
   static const List<String> _fadeAnimRoutes = <String>[];
+  static const List<String> _tabRoutes = <String>[
+    HomePageProvider.routeName,
+  ];
 
+  final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
   final LifecycleTracker _tracker = RouteTracker(
     onActive: (Route<dynamic> route) {
-      if (route is! PageRoute) {
+      if (route.settings.name?.isEmpty ?? true) {
+        return;
+      }
+      if (!AppRouter.instance.names.containsKey(route.settings.name)) {
+        return;
+      }
+      if (_tabRoutes.contains(route.settings.name)) {
         return;
       }
       if (kDebugMode) {
-        print('onActive - ${route.settings.name} - ${AppManifest.names[route.settings.name]} - ${route.hashCode}');
+        print('Analytics#onActive - ${route.settings.name} - ${AppRouter.instance.names[route.settings.name]}');
       }
     },
     onInactive: (Route<dynamic> route) {
-      if (route is! PageRoute) {
+      if (route.settings.name?.isEmpty ?? true) {
+        return;
+      }
+      if (!AppRouter.instance.names.containsKey(route.settings.name)) {
+        return;
+      }
+      if (_tabRoutes.contains(route.settings.name)) {
         return;
       }
       if (kDebugMode) {
-        print('onInactive - ${route.settings.name} - ${AppManifest.names[route.settings.name]} - ${route.hashCode}');
+        print('Analytics#onInactive - ${route.settings.name} - ${AppRouter.instance.names[route.settings.name]}');
       }
     },
   );
   final RouteObserver<Route<dynamic>> _routeObserver = RouteObserver<Route<dynamic>>();
+  final PowerfulRouteObserver<Route<dynamic>> _powerfulRouteObserver = PowerfulRouteObserver<Route<dynamic>>();
 
   LifecycleTracker get tracker => _tracker;
 
   RouteObserver<Route<dynamic>> get routeObserver => _routeObserver;
 
+  PowerfulRouteObserver<Route<dynamic>> get powerfulRouteObserver => _powerfulRouteObserver;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: _navigatorKey,
       onGenerateRoute: onGenerateRoute,
       onUnknownRoute: _onUnknownRoute,
       navigatorObservers: <NavigatorObserver>[
@@ -68,7 +87,7 @@ class AppState extends State<App> {
   }
 
   Route<dynamic>? onGenerateRoute(RouteSettings settings) {
-    if (AppManifest.routes.containsKey(settings.name)) {
+    if (AppRouter.instance.routes.containsKey(settings.name)) {
       if (_fadeAnimRoutes.contains(settings.name)) {
         return PageRouteBuilder<dynamic>(
           settings: settings,
@@ -105,7 +124,7 @@ class AppState extends State<App> {
     return LifecycleWidget(
       tracker: _tracker,
       child: Builder(
-        builder: AppManifest.routes[routeName]!,
+        builder: AppRouter.instance.routes[routeName]!,
       ),
     );
   }

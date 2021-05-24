@@ -1,87 +1,66 @@
 import 'package:flutter/material.dart';
 import 'package:lifecycle_kit/lifecycle_kit.dart';
+import 'package:lifecycle_kit_example/widgets/routes.dart';
 
-class LifecyclePage extends StatefulWidget {
+class LifecyclePage {
   const LifecyclePage({
-    Key? key,
-    required this.tracker,
     required this.routeName,
     required this.routeBuilder,
-    required this.routeObserver,
-  }) : super(key: key);
+  });
 
-  final LifecycleTracker tracker;
   final String routeName;
   final WidgetBuilder routeBuilder;
-  final RouteObserver<Route<dynamic>> routeObserver;
+}
+
+class LifecyclePageView extends StatefulWidget {
+  LifecyclePageView({
+    Key? key,
+    required this.tracker,
+    required this.routeObserver,
+    PageController? controller,
+    this.physics,
+    this.onPageChanged,
+    required this.pages,
+  })  : controller = controller ?? PageController(initialPage: 0),
+        super(key: key);
+
+  final LifecycleTracker tracker;
+  final PowerfulRouteObserver<Route<dynamic>> routeObserver;
+  final PageController controller;
+  final ScrollPhysics? physics;
+  final ValueChanged<int>? onPageChanged;
+  final List<LifecyclePage> pages;
 
   @override
   State<StatefulWidget> createState() {
-    return _LifecyclePageState();
+    return _LifecyclePageViewState();
   }
 }
 
-class _LifecyclePageState extends State<LifecyclePage> with RouteAware, WidgetsBindingObserver {
+class _LifecyclePageViewState extends State<LifecyclePageView> with PowerfulRouteAware, WidgetsBindingObserver {
   //
-  int? _page;
-  int? _selectedPage;
-  PageController? _controller;
+  late int _selectedIndex;
 
   //
-  ModalRoute<dynamic>? _route;
-  ModalRoute<dynamic>? _pageRoute;
-  RouteObserver<Route<dynamic>>? _routeObserver;
-
-  int? get _currentPage {
-    if (_controller == null) {
-      return null;
-    }
-    if (_controller!.hasClients && _controller!.position.haveDimensions) {
-      return _controller!.page?.round() ?? _controller!.initialPage;
-    }
-    return _controller!.initialPage;
-  }
-
-  bool get _isCurrent => _page != null && _currentPage != null && _currentPage == _page;
+  late final ModalRoute<dynamic> _route = ModalRoute.of(context)!;
+  late final List<ModalRoute<dynamic>> _pageRoutes = widget.pages.map((LifecyclePage element) {
+    return PageRouteBuilder<dynamic>(
+      settings: _route.settings.copyWith(name: element.routeName),
+      pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) => element.routeBuilder.call(context),
+    );
+  }).toList();
+  late final PowerfulRouteObserver<Route<dynamic>> _routeObserver = widget.routeObserver..subscribe(this, _route);
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addObserver(this);
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    //
-    _page ??= context.findAncestorWidgetOfExactType<IndexedSemantics>()!.index;
-    _controller?.removeListener(_listenPageChange); // TabBarView 的 didChangeDependencies 会频繁创建 PageController
-    _controller = Scrollable.of(context)!.widget.controller as PageController;
-    _controller!.addListener(_listenPageChange);
-    //
-    _route ??= ModalRoute.of(context);
-    _pageRoute ??= PageRouteBuilder<dynamic>(
-      settings: _route!.settings.copyWith(name: widget.routeName),
-      pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) => widget.routeBuilder.call(context),
-    );
-    _routeObserver ??= widget.routeObserver..subscribe(this, _route!);
-  }
-
-  void _listenPageChange() {
-    int? currentPage = _currentPage;
-    if (currentPage != _selectedPage) {
-      if (currentPage == _page) {
-        widget.tracker.trackActive(route: _pageRoute!);
-      } else if (_selectedPage == null || _selectedPage == _page) {
-        widget.tracker.trackInactive(route: _pageRoute!);
-      }
-    }
-    _selectedPage = currentPage;
+    _selectedIndex = widget.controller.initialPage;
   }
 
   @override
   void dispose() {
-    _routeObserver?.unsubscribe(this);
+    _routeObserver.unsubscribe(this);
     WidgetsBinding.instance!.removeObserver(this);
     super.dispose();
   }
@@ -91,32 +70,48 @@ class _LifecyclePageState extends State<LifecyclePage> with RouteAware, WidgetsB
   @override
   void didPush() {
     // super.didPush();
-    if (_isCurrent) {
-      widget.tracker.trackActive(route: _pageRoute!);
+    if (_route.isCurrent) {
+      widget.tracker.trackActive(route: _pageRoutes[_selectedIndex]);
     }
   }
 
   @override
   void didPushNext() {
     // super.didPushNext();
-    if (_isCurrent) {
-      widget.tracker.trackInactive(route: _pageRoute!);
-    }
+    // if (_route.isCurrent) {// false
+      widget.tracker.trackInactive(route: _pageRoutes[_selectedIndex]);
+    // }
   }
 
   @override
   void didPopNext() {
     // super.didPopNext();
-    if (_isCurrent) {
-      widget.tracker.trackActive(route: _pageRoute!);
-    }
+    // if (_route.isCurrent) {// true
+      widget.tracker.trackActive(route: _pageRoutes[_selectedIndex]);
+    // }
   }
 
   @override
   void didPop() {
     // super.didPop();
-    if (_isCurrent) {
-      widget.tracker.trackInactive(route: _pageRoute!);
+    if (_route.isCurrent) {
+      widget.tracker.trackInactive(route: _pageRoutes[_selectedIndex]);
+    }
+  }
+
+  @override
+  void didRemove(Route<dynamic>? previousRoute) {
+    // super.didRemove(previousRoute);
+    if (previousRoute?.isCurrent ?? false) {
+      widget.tracker.trackInactive(route: _pageRoutes[_selectedIndex]);
+    }
+  }
+
+  @override
+  void didReplace({Route<dynamic>? newRoute}) {
+    // super.didReplace(newRoute: newRoute);
+    if (newRoute?.isCurrent ?? false) {
+      widget.tracker.trackInactive(route: _pageRoutes[_selectedIndex]);
     }
   }
 
@@ -125,16 +120,12 @@ class _LifecyclePageState extends State<LifecyclePage> with RouteAware, WidgetsB
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     // super.didChangeAppLifecycleState(state);
-    if (_route?.isCurrent ?? false) {
+    if (_route.isCurrent) {
       if (state == AppLifecycleState.resumed) {
-        if (_isCurrent) {
-          widget.tracker.trackActive(route: _pageRoute!);
-        }
+        widget.tracker.trackActive(route: _pageRoutes[_selectedIndex]);
       } else if (state == AppLifecycleState.inactive) {
         // AppLifecycleState.paused
-        if (_isCurrent) {
-          widget.tracker.trackInactive(route: _pageRoute!);
-        }
+        widget.tracker.trackInactive(route: _pageRoutes[_selectedIndex]);
       }
     }
   }
@@ -143,8 +134,24 @@ class _LifecyclePageState extends State<LifecyclePage> with RouteAware, WidgetsB
 
   @override
   Widget build(BuildContext context) {
-    return Builder(
-      builder: widget.routeBuilder,
+    return PageView(
+      controller: widget.controller,
+      physics: widget.physics,
+      onPageChanged: _onPageChanged,
+      children: widget.pages.map((LifecyclePage element) {
+        return element.routeBuilder.call(context);
+      }).toList(),
     );
+  }
+
+  void _onPageChanged(int index) {
+    if (_selectedIndex != index) {
+      if (_route.isCurrent) {
+        widget.tracker.trackInactive(route: _pageRoutes[_selectedIndex]);
+        widget.tracker.trackActive(route: _pageRoutes[index]);
+      }
+      _selectedIndex = index;
+    }
+    widget.onPageChanged?.call(index);
   }
 }
