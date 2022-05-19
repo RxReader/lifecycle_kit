@@ -14,8 +14,10 @@ class PowerfulRouteAware {
   void didReplace({Route<dynamic>? newRoute}) {}
 }
 
-class PowerfulRouteObserver<R extends Route<dynamic>> extends NavigatorObserver {
-  final Map<R, Set<PowerfulRouteAware>> _listeners = <R, Set<PowerfulRouteAware>>{};
+class PowerfulRouteObserver<R extends Route<dynamic>>
+    extends NavigatorObserver {
+  final Map<R, Set<PowerfulRouteAware>> _listeners =
+      <R, Set<PowerfulRouteAware>>{};
 
   /// Subscribe [routeAware] to be informed about changes to [route].
   ///
@@ -23,7 +25,8 @@ class PowerfulRouteObserver<R extends Route<dynamic>> extends NavigatorObserver 
   /// to [route], e.g. when [route] is covered by another route or when [route]
   /// is popped off the [Navigator] stack.
   void subscribe(PowerfulRouteAware routeAware, R route) {
-    final Set<PowerfulRouteAware> subscribers = _listeners.putIfAbsent(route, () => <PowerfulRouteAware>{});
+    final Set<PowerfulRouteAware> subscribers =
+        _listeners.putIfAbsent(route, () => <PowerfulRouteAware>{});
     if (subscribers.add(routeAware)) {
       routeAware.didPush();
     }
@@ -43,7 +46,8 @@ class PowerfulRouteObserver<R extends Route<dynamic>> extends NavigatorObserver 
   @override
   void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
     if (route is R && previousRoute is R) {
-      final Set<PowerfulRouteAware>? previousSubscribers = _listeners[previousRoute];
+      final Set<PowerfulRouteAware>? previousSubscribers =
+          _listeners[previousRoute];
 
       if (previousSubscribers != null) {
         for (final PowerfulRouteAware routeAware in previousSubscribers) {
@@ -56,7 +60,8 @@ class PowerfulRouteObserver<R extends Route<dynamic>> extends NavigatorObserver 
   @override
   void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
     if (route is R && previousRoute is R) {
-      final List<PowerfulRouteAware>? previousSubscribers = _listeners[previousRoute]?.toList();
+      final List<PowerfulRouteAware>? previousSubscribers =
+          _listeners[previousRoute]?.toList();
 
       if (previousSubscribers != null) {
         for (final PowerfulRouteAware routeAware in previousSubscribers) {
@@ -89,7 +94,8 @@ class PowerfulRouteObserver<R extends Route<dynamic>> extends NavigatorObserver 
   @override
   void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) {
     if (oldRoute is R) {
-      final List<PowerfulRouteAware>? oldSubscribers = _listeners[oldRoute]?.toList();
+      final List<PowerfulRouteAware>? oldSubscribers =
+          _listeners[oldRoute]?.toList();
       if (oldSubscribers != null) {
         for (final PowerfulRouteAware routeAware in oldSubscribers) {
           routeAware.didReplace(newRoute: newRoute);

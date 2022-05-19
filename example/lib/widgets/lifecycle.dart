@@ -23,7 +23,7 @@ class LifecyclePageView extends StatefulWidget {
     this.physics,
     this.onPageChanged,
     required this.pages,
-  })  : controller = controller ?? PageController(initialPage: 0);
+  }) : controller = controller ?? PageController(initialPage: 0);
 
   final String? restorationId;
   final LifecycleTracker tracker;
@@ -39,7 +39,8 @@ class LifecyclePageView extends StatefulWidget {
   }
 }
 
-class _LifecyclePageViewState extends State<LifecyclePageView> with PowerfulRouteAware, WidgetsBindingObserver {
+class _LifecyclePageViewState extends State<LifecyclePageView>
+    with PowerfulRouteAware, WidgetsBindingObserver {
   //
   late int _selectedIndex = widget.controller.initialPage;
 
@@ -61,7 +62,9 @@ class _LifecyclePageViewState extends State<LifecyclePageView> with PowerfulRout
     _pageRoutes ??= widget.pages.map((LifecyclePage element) {
       return PageRouteBuilder<dynamic>(
         settings: _route!.settings.copyWith(name: element.routeName),
-        pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) => element.routeBuilder.call(context),
+        pageBuilder: (BuildContext context, Animation<double> animation,
+                Animation<double> secondaryAnimation) =>
+            element.routeBuilder.call(context),
       );
     }).toList();
     _routeObserver ??= widget.routeObserver..subscribe(this, _route!);
@@ -88,7 +91,7 @@ class _LifecyclePageViewState extends State<LifecyclePageView> with PowerfulRout
   void didPushNext() {
     // super.didPushNext();
     // if (_route?.isCurrent ?? false) {// false
-      widget.tracker.trackInactive(route: _pageRoutes![_selectedIndex]);
+    widget.tracker.trackInactive(route: _pageRoutes![_selectedIndex]);
     // }
   }
 
@@ -96,7 +99,7 @@ class _LifecyclePageViewState extends State<LifecyclePageView> with PowerfulRout
   void didPopNext() {
     // super.didPopNext();
     // if (_route?.isCurrent ?? false) {// true
-      widget.tracker.trackActive(route: _pageRoutes![_selectedIndex]);
+    widget.tracker.trackActive(route: _pageRoutes![_selectedIndex]);
     // }
   }
 
@@ -104,7 +107,7 @@ class _LifecyclePageViewState extends State<LifecyclePageView> with PowerfulRout
   void didPop() {
     // super.didPop();
     // if (_route?.isCurrent ?? false) {
-      widget.tracker.trackInactive(route: _pageRoutes![_selectedIndex]);
+    widget.tracker.trackInactive(route: _pageRoutes![_selectedIndex]);
     // }
   }
 

@@ -17,7 +17,8 @@ class LifecycleWidget extends StatefulWidget {
   }
 }
 
-class _LifecycleWidgetState extends State<LifecycleWidget> with WidgetsBindingObserver {
+class _LifecycleWidgetState extends State<LifecycleWidget>
+    with WidgetsBindingObserver {
   Route<dynamic>? _route;
 
   @override

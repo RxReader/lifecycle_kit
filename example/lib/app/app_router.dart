@@ -8,11 +8,11 @@ import 'package:router_api/router_api.dart' as ra;
 
 typedef Next = Future<dynamic> Function();
 typedef Interceptor = Future<dynamic> Function(
-    BuildContext context,
-    String routeName, {
-    Object? arguments,
-    Next? next,
-    });
+  BuildContext context,
+  String routeName, {
+  Object? arguments,
+  Next? next,
+});
 
 mixin InterceptableRouter on ra.Router {
   final List<Interceptor> _interceptors = <Interceptor>[];
@@ -24,9 +24,14 @@ mixin InterceptableRouter on ra.Router {
   }
 
   @override
-  void useRoute({required String name, required String routeName, required WidgetBuilder routeBuilder, Interceptor? interceptor}) {
+  void useRoute(
+      {required String name,
+      required String routeName,
+      required WidgetBuilder routeBuilder,
+      Interceptor? interceptor}) {
     assert(!_routeInterceptors.containsKey(routeName));
-    super.useRoute(name: name, routeName: routeName, routeBuilder: routeBuilder);
+    super
+        .useRoute(name: name, routeName: routeName, routeBuilder: routeBuilder);
     if (interceptor != null) {
       _routeInterceptors[routeName] = interceptor;
     }
@@ -43,32 +48,39 @@ mixin InterceptableRouter on ra.Router {
     );
   }
 
-  Future<Object?> pushNamed(BuildContext context, String routeName, {Object? arguments}) {
+  Future<Object?> pushNamed(BuildContext context, String routeName,
+      {Object? arguments}) {
     final List<Interceptor> activeInterceptors = <Interceptor>[
       ..._interceptors,
-      if (_routeInterceptors.containsKey(routeName)) _routeInterceptors[routeName]!,
+      if (_routeInterceptors.containsKey(routeName))
+        _routeInterceptors[routeName]!,
     ];
     final List<Next> nexts = <Next>[
-          () => Navigator.of(context).pushNamed(routeName, arguments: arguments),
+      () => Navigator.of(context).pushNamed(routeName, arguments: arguments),
     ];
     for (final Interceptor interceptor in activeInterceptors.reversed) {
       final Next next = nexts.last;
-      nexts.add(() => interceptor.call(context, routeName, arguments: arguments, next: next));
+      nexts.add(() => interceptor.call(context, routeName,
+          arguments: arguments, next: next));
     }
     return nexts.last.call();
   }
 
-  Future<Object?> pushReplacementNamed(BuildContext context, String routeName, {Object? result, Object? arguments}) {
+  Future<Object?> pushReplacementNamed(BuildContext context, String routeName,
+      {Object? result, Object? arguments}) {
     final List<Interceptor> activeInterceptors = <Interceptor>[
       ..._interceptors,
-      if (_routeInterceptors.containsKey(routeName)) _routeInterceptors[routeName]!,
+      if (_routeInterceptors.containsKey(routeName))
+        _routeInterceptors[routeName]!,
     ];
     final List<Next> nexts = <Next>[
-          () => Navigator.of(context).pushReplacementNamed(routeName, result: result, arguments: arguments),
+      () => Navigator.of(context).pushReplacementNamed(routeName,
+          result: result, arguments: arguments),
     ];
     for (final Interceptor interceptor in activeInterceptors.reversed) {
       final Next next = nexts.last;
-      nexts.add(() => interceptor.call(context, routeName, arguments: arguments, next: next));
+      nexts.add(() => interceptor.call(context, routeName,
+          arguments: arguments, next: next));
     }
     return nexts.last.call();
   }
@@ -114,8 +126,7 @@ class AppRouter extends ra.Router with InterceptableRouter, Manifest {
   static AppRouter get instance => _instance ??= AppRouter._();
   static AppRouter? _instance;
 
-  final List<String> _fadeRoutes = <String>[
-  ];
+  final List<String> _fadeRoutes = <String>[];
 
   @protected
   @override
@@ -123,15 +134,20 @@ class AppRouter extends ra.Router with InterceptableRouter, Manifest {
     super.registerBuiltIn();
   }
 
-  Route<dynamic>? onGenerateRoute(RouteSettings settings, LifecycleTracker tracker) {
+  Route<dynamic>? onGenerateRoute(
+      RouteSettings settings, LifecycleTracker tracker) {
     if (routes.containsKey(settings.name)) {
       if (_fadeRoutes.contains(settings.name)) {
         return PageRouteBuilder<dynamic>(
           settings: settings,
-          pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
+          pageBuilder: (BuildContext context, Animation<double> animation,
+              Animation<double> secondaryAnimation) {
             return _routeWidget(context, tracker, settings.name);
           },
-          transitionsBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
+          transitionsBuilder: (BuildContext context,
+              Animation<double> animation,
+              Animation<double> secondaryAnimation,
+              Widget child) {
             return FadeTransition(
               opacity: CurvedAnimation(
                 parent: animation,
@@ -143,21 +159,25 @@ class AppRouter extends ra.Router with InterceptableRouter, Manifest {
         );
       }
       return MaterialPageRoute<dynamic>(
-        builder: (BuildContext context) => _routeWidget(context, tracker, settings.name),
+        builder: (BuildContext context) =>
+            _routeWidget(context, tracker, settings.name),
         settings: settings,
       );
     }
     return null;
   }
 
-  Route<dynamic>? onUnknownRoute(RouteSettings settings, LifecycleTracker tracker) {
+  Route<dynamic>? onUnknownRoute(
+      RouteSettings settings, LifecycleTracker tracker) {
     return MaterialPageRoute<dynamic>(
-      builder: (BuildContext context) => _routeWidget(context, tracker, NotFoundPageProvider.routeName),
+      builder: (BuildContext context) =>
+          _routeWidget(context, tracker, NotFoundPageProvider.routeName),
       settings: settings,
     );
   }
 
-  Widget _routeWidget(BuildContext context, LifecycleTracker tracker, String? routeName) {
+  Widget _routeWidget(
+      BuildContext context, LifecycleTracker tracker, String? routeName) {
     return LifecycleWidget(
       tracker: tracker,
       child: Builder(

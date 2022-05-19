@@ -38,13 +38,15 @@ class TestPage extends StatelessWidget {
           ListTile(
             title: Text('popAndPushNamed'),
             onTap: () {
-              Navigator.of(context).popAndPushNamed(NotFoundPageProvider.routeName);
+              Navigator.of(context)
+                  .popAndPushNamed(NotFoundPageProvider.routeName);
             },
           ),
           ListTile(
             title: Text('popUntil'),
             onTap: () {
-              Navigator.of(context).popUntil(ModalRoute.withName(Navigator.defaultRouteName));
+              Navigator.of(context)
+                  .popUntil(ModalRoute.withName(Navigator.defaultRouteName));
             },
           ),
           ListTile(
@@ -56,13 +58,16 @@ class TestPage extends StatelessWidget {
           ListTile(
             title: Text('pushAndRemoveUntil/pushNamedAndRemoveUntil'),
             onTap: () {
-              Navigator.of(context).pushNamedAndRemoveUntil(NotFoundPageProvider.routeName, ModalRoute.withName(Navigator.defaultRouteName));
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                  NotFoundPageProvider.routeName,
+                  ModalRoute.withName(Navigator.defaultRouteName));
             },
           ),
           ListTile(
             title: Text('pushReplacement/pushReplacementNamed'),
             onTap: () {
-              Navigator.of(context).pushReplacementNamed(NotFoundPageProvider.routeName);
+              Navigator.of(context)
+                  .pushReplacementNamed(NotFoundPageProvider.routeName);
             },
           ),
           ListTile(

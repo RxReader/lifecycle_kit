@@ -46,7 +46,8 @@ class AppState extends State<App> {
         return;
       }
       if (kDebugMode) {
-        print('Analytics#onActive - ${route.settings.name} - ${AppRouter.instance.names[route.settings.name]}');
+        print(
+            'Analytics#onActive - ${route.settings.name} - ${AppRouter.instance.names[route.settings.name]}');
       }
     },
     onInactive: (Route<dynamic> route) {
@@ -60,39 +61,47 @@ class AppState extends State<App> {
         return;
       }
       if (kDebugMode) {
-        print('Analytics#onInactive - ${route.settings.name} - ${AppRouter.instance.names[route.settings.name]}');
+        print(
+            'Analytics#onInactive - ${route.settings.name} - ${AppRouter.instance.names[route.settings.name]}');
       }
     },
   );
-  final RouteObserver<Route<dynamic>> _routeObserver = RouteObserver<Route<dynamic>>();
-  final PowerfulRouteObserver<Route<dynamic>> _powerfulRouteObserver = PowerfulRouteObserver<Route<dynamic>>();
+  final RouteObserver<Route<dynamic>> _routeObserver =
+      RouteObserver<Route<dynamic>>();
+  final PowerfulRouteObserver<Route<dynamic>> _powerfulRouteObserver =
+      PowerfulRouteObserver<Route<dynamic>>();
 
   LifecycleTracker get tracker => _tracker;
 
   RouteObserver<Route<dynamic>> get routeObserver => _routeObserver;
 
-  PowerfulRouteObserver<Route<dynamic>> get powerfulRouteObserver => _powerfulRouteObserver;
+  PowerfulRouteObserver<Route<dynamic>> get powerfulRouteObserver =>
+      _powerfulRouteObserver;
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       navigatorKey: _navigatorKey,
-      onGenerateRoute: (RouteSettings settings) => AppRouter.instance.onGenerateRoute(settings, _tracker),
-      onUnknownRoute: (RouteSettings settings) => AppRouter.instance.onUnknownRoute(settings, _tracker),
+      onGenerateRoute: (RouteSettings settings) =>
+          AppRouter.instance.onGenerateRoute(settings, _tracker),
+      onUnknownRoute: (RouteSettings settings) =>
+          AppRouter.instance.onUnknownRoute(settings, _tracker),
       navigatorObservers: <NavigatorObserver>[
         // LifecycleRouteObserver<Route<dynamic>>(
         //   tracker: _tracker,
         // ),
         LifecycleRouteObserver<Route<dynamic>>(
           tracker: RouteTracker(
-            onInactive: (Route<dynamic> route) => _tracker.trackInactive(route: route),
+            onInactive: (Route<dynamic> route) =>
+                _tracker.trackInactive(route: route),
           ),
         ),
         _routeObserver,
         _powerfulRouteObserver,
         LifecycleRouteObserver<Route<dynamic>>(
           tracker: RouteTracker(
-            onActive: (Route<dynamic> route) => _tracker.trackActive(route: route),
+            onActive: (Route<dynamic> route) =>
+                _tracker.trackActive(route: route),
           ),
         ),
       ],
@@ -108,5 +117,6 @@ class AppState extends State<App> {
     );
   }
 
-  Route<dynamic>? onGenerateRoute(RouteSettings settings) => AppRouter.instance.onGenerateRoute(settings, _tracker);
+  Route<dynamic>? onGenerateRoute(RouteSettings settings) =>
+      AppRouter.instance.onGenerateRoute(settings, _tracker);
 }
