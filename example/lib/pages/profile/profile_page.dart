@@ -8,14 +8,17 @@ part 'profile_page.g.dart';
   routeName: '/profile',
 )
 class ProfilePage extends StatefulWidget {
+  const ProfilePage({
+    super.key,
+  });
+
   @override
   State<StatefulWidget> createState() {
     return _ProfilePageState();
   }
 }
 
-class _ProfilePageState extends State<ProfilePage>
-    with AutomaticKeepAliveClientMixin<ProfilePage> {
+class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClientMixin<ProfilePage> {
   @override
   bool get wantKeepAlive => true;
 
@@ -24,7 +27,7 @@ class _ProfilePageState extends State<ProfilePage>
     super.build(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('我的'),
+        title: Text('我的'),
       ),
     );
   }

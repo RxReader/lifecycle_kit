@@ -3,10 +3,10 @@ import 'package:lifecycle_kit/src/tracker.dart';
 
 class LifecycleWidget extends StatefulWidget {
   const LifecycleWidget({
-    Key? key,
+    super.key,
     required this.tracker,
     required this.child,
-  })  : super(key: key);
+  });
 
   final LifecycleTracker tracker;
   final Widget child;
@@ -23,7 +23,7 @@ class _LifecycleWidgetState extends State<LifecycleWidget> with WidgetsBindingOb
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
@@ -34,7 +34,7 @@ class _LifecycleWidgetState extends State<LifecycleWidget> with WidgetsBindingOb
 
   @override
   void dispose() {
-    WidgetsBinding.instance!.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 

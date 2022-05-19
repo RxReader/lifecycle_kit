@@ -1,13 +1,17 @@
+import 'package:example/app/app_router.dart';
+import 'package:example/app/router.dart';
+import 'package:example/pages/home/home_page.dart';
+import 'package:example/widgets/routes.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lifecycle_kit/lifecycle_kit.dart';
-import 'package:lifecycle_kit_example/app/app_router.dart';
-import 'package:lifecycle_kit_example/pages/home/home_page.dart';
-import 'package:lifecycle_kit_example/pages/not_found/not_found_page.dart';
-import 'package:lifecycle_kit_example/widgets/routes.dart';
+import 'package:router_annotation/router_annotation.dart' as rca;
 
+@rca.Manifest()
 class App extends StatefulWidget {
-  const App({Key? key}) : super(key: key);
+  const App({
+    super.key,
+  });
 
   @override
   State<StatefulWidget> createState() {
@@ -25,7 +29,6 @@ class App extends StatefulWidget {
 }
 
 class AppState extends State<App> {
-  static const List<String> _fadeAnimRoutes = <String>[];
   static const List<String> _tabRoutes = <String>[
     HomePageProvider.routeName,
   ];
@@ -74,8 +77,8 @@ class AppState extends State<App> {
   Widget build(BuildContext context) {
     return MaterialApp(
       navigatorKey: _navigatorKey,
-      onGenerateRoute: onGenerateRoute,
-      onUnknownRoute: _onUnknownRoute,
+      onGenerateRoute: (RouteSettings settings) => AppRouter.instance.onGenerateRoute(settings, _tracker),
+      onUnknownRoute: (RouteSettings settings) => AppRouter.instance.onUnknownRoute(settings, _tracker),
       navigatorObservers: <NavigatorObserver>[
         // LifecycleRouteObserver<Route<dynamic>>(
         //   tracker: _tracker,
@@ -94,50 +97,16 @@ class AppState extends State<App> {
         ),
       ],
       title: 'Lifecycle Kit',
-      theme: ThemeData.light().copyWith(platform: TargetPlatform.iOS),
-    );
-  }
-
-  Route<dynamic>? onGenerateRoute(RouteSettings settings) {
-    if (AppRouter.instance.routes.containsKey(settings.name)) {
-      if (_fadeAnimRoutes.contains(settings.name)) {
-        return PageRouteBuilder<dynamic>(
-          settings: settings,
-          pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
-            return _routeWidget(context, settings, settings.name!);
+      theme: ThemeData.light().copyWith(
+        pageTransitionsTheme: PageTransitionsTheme(
+          builders: <TargetPlatform, PageTransitionsBuilder>{
+            TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+            TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
           },
-          transitionsBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
-            return FadeTransition(
-              opacity: CurvedAnimation(
-                parent: animation,
-                curve: Curves.linear,
-              ),
-              child: child,
-            );
-          },
-        );
-      }
-      return MaterialPageRoute<dynamic>(
-        builder: (BuildContext context) => _routeWidget(context, settings, settings.name!),
-        settings: settings,
-      );
-    }
-    return null;
-  }
-
-  Route<dynamic> _onUnknownRoute(RouteSettings settings) {
-    return MaterialPageRoute<dynamic>(
-      builder: (BuildContext context) => _routeWidget(context, settings, NotFoundPageProvider.routeName),
-      settings: settings,
-    );
-  }
-
-  Widget _routeWidget(BuildContext context, RouteSettings settings, String routeName) {
-    return LifecycleWidget(
-      tracker: _tracker,
-      child: Builder(
-        builder: AppRouter.instance.routes[routeName]!,
+        ),
       ),
     );
   }
+
+  Route<dynamic>? onGenerateRoute(RouteSettings settings) => AppRouter.instance.onGenerateRoute(settings, _tracker);
 }

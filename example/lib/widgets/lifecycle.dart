@@ -1,7 +1,7 @@
+import 'package:example/widgets/routes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lifecycle_kit/lifecycle_kit.dart';
-import 'package:lifecycle_kit_example/widgets/routes.dart';
 
 class LifecyclePage {
   const LifecyclePage({
@@ -15,16 +15,17 @@ class LifecyclePage {
 
 class LifecyclePageView extends StatefulWidget {
   LifecyclePageView({
-    Key? key,
+    super.key,
+    this.restorationId,
     required this.tracker,
     required this.routeObserver,
     PageController? controller,
     this.physics,
     this.onPageChanged,
     required this.pages,
-  })  : controller = controller ?? PageController(initialPage: 0),
-        super(key: key);
+  })  : controller = controller ?? PageController(initialPage: 0);
 
+  final String? restorationId;
   final LifecycleTracker tracker;
   final PowerfulRouteObserver<Route<dynamic>> routeObserver;
   final PageController controller;
@@ -50,7 +51,7 @@ class _LifecyclePageViewState extends State<LifecyclePageView> with PowerfulRout
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
@@ -69,7 +70,7 @@ class _LifecyclePageViewState extends State<LifecyclePageView> with PowerfulRout
   @override
   void dispose() {
     _routeObserver?.unsubscribe(this);
-    WidgetsBinding.instance!.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
@@ -143,6 +144,7 @@ class _LifecyclePageViewState extends State<LifecyclePageView> with PowerfulRout
   @override
   Widget build(BuildContext context) {
     return PageView(
+      restorationId: widget.restorationId,
       controller: widget.controller,
       physics: widget.physics,
       onPageChanged: _onPageChanged,

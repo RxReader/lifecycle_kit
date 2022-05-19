@@ -1,0 +1,16 @@
+name: publish manually
+
+on: workflow_dispatch
+
+jobs:
+  publish_manually:
+    name: Publish Manually
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: sakebook/actions-flutter-pub-publisher@v1.4.0
+        with:
+          credential: ${{ secrets.CREDENTIAL_JSON }}
+          flutter_package: true
+          skip_test: true
+          dry_run: false

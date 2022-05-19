@@ -87,7 +87,7 @@ class PowerfulRouteObserver<R extends Route<dynamic>> extends NavigatorObserver 
   }
 
   @override
-  void didReplace({ Route<dynamic>? newRoute, Route<dynamic>? oldRoute }) {
+  void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) {
     if (oldRoute is R) {
       final List<PowerfulRouteAware>? oldSubscribers = _listeners[oldRoute]?.toList();
       if (oldSubscribers != null) {

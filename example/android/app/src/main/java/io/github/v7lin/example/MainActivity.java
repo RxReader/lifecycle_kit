@@ -1,4 +1,4 @@
-package io.github.v7lin.lifecycle_kit_example;
+package io.github.v7lin.example;
 
 import io.flutter.embedding.android.FlutterActivity;
 

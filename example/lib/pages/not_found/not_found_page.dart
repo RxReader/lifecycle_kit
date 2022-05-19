@@ -8,11 +8,15 @@ part 'not_found_page.g.dart';
   routeName: '/not_found',
 )
 class NotFoundPage extends StatelessWidget {
+  const NotFoundPage({
+    super.key,
+  });
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('404 Page Not Found!'),
+        title: Text('404 Page Not Found!'),
       ),
     );
   }

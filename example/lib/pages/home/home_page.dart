@@ -1,9 +1,9 @@
+import 'package:example/app/app.dart';
+import 'package:example/pages/profile/profile_page.dart';
+import 'package:example/pages/todo/todo_page.dart';
+import 'package:example/widgets/lifecycle.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:lifecycle_kit_example/app/app.dart';
-import 'package:lifecycle_kit_example/pages/profile/profile_page.dart';
-import 'package:lifecycle_kit_example/pages/todo/todo_page.dart';
-import 'package:lifecycle_kit_example/widgets/lifecycle.dart';
 import 'package:router_annotation/router_annotation.dart' as rca;
 
 part 'home_page.g.dart';
@@ -13,6 +13,10 @@ part 'home_page.g.dart';
   routeName: Navigator.defaultRouteName,
 )
 class HomePage extends StatefulWidget {
+  const HomePage({
+    super.key,
+  });
+
   @override
   State<StatefulWidget> createState() {
     return _HomePageState();
@@ -36,7 +40,7 @@ class _HomePageState extends State<HomePage> {
         tracker: App.of(context).tracker,
         routeObserver: App.of(context).powerfulRouteObserver,
         controller: _controller,
-        physics: const NeverScrollableScrollPhysics(),
+        physics: NeverScrollableScrollPhysics(),
         pages: <LifecyclePage>[
           LifecyclePage(
             routeName: TodoPageProvider.routeName,
@@ -50,7 +54,7 @@ class _HomePageState extends State<HomePage> {
       ),
       bottomNavigationBar: BottomAppBar(
         child: CupertinoTabBar(
-          items: const <BottomNavigationBarItem>[
+          items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(Icons.edit),
               label: '待办',
