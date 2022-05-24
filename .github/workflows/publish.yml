@@ -13,12 +13,12 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
-      - name: Run inject credential
-        env:
-          CREDENTIAL: ${{ secrets.CREDENTIAL_JSON }}
+      - name: Run inject credentials
+        with:
+          credentials: ${{ secrets.CREDENTIALS_JSON }}
         run: |
           mkdir -p ~/.pub-cache
-          echo $CREDENTIAL > ~/.pub-cache/credentials.json
+          echo ${INPUT_CREDENTIALS} > ~/.pub-cache/credentials.json
       - run: flutter --version
       - run: flutter pub get
       - run: flutter format --dry-run --set-exit-if-changed .
