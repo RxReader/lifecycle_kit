@@ -13,7 +13,6 @@ jobs:
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
         with:
-#          flutter-version: '3.0.1'
           channel: 'stable'
       - run: flutter --version
       - run: flutter pub get
@@ -36,7 +35,6 @@ jobs:
           java-version: '11'
       - uses: subosito/flutter-action@v2
         with:
-#          flutter-version: '3.0.1'
           channel: 'stable'
       - name: Run install ndk
         run: sudo echo "y" | sudo $ANDROID_HOME/tools/bin/sdkmanager "ndk;21.1.6352462"
