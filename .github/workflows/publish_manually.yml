@@ -19,6 +19,7 @@ jobs:
         env:
           CREDENTIAL: ${{ secrets.CREDENTIAL_JSON }}
         run: |
+          env
           mkdir -p ~/.pub-cache
           cat <<EOF > ~/.pub-cache/credentials.json
           "$CREDENTIAL"
