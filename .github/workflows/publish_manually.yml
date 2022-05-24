@@ -15,9 +15,7 @@ jobs:
         with:
 #          flutter-version: '3.0.1'
           channel: 'stable'
-      - env:
-          CREDENTIAL: ${{ secrets.CREDENTIAL_JSON }}
-      - run: echo $CREDENTIAL >> $PUB_CACHE/credentials.json
+      - run: echo ${{ secrets.CREDENTIAL_JSON }} >> $PUB_CACHE/credentials.json
       - run: flutter --version
       - run: flutter pub get
       - run: flutter format --dry-run --set-exit-if-changed .
