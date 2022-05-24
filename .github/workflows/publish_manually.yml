@@ -18,6 +18,7 @@ jobs:
       - name: Run inject credential
         env:
           CREDENTIAL: ${{ secrets.CREDENTIAL_JSON }}
+          CREDENTIAL_TEST: {"abc": "123"}
         run: |
           env
           mkdir -p ~/.pub-cache
