@@ -15,11 +15,13 @@ jobs:
         with:
 #          flutter-version: '3.0.1'
           channel: 'stable'
-      - uses: jsdaniell/create-json@1.1.2
-        with:
-          name: credentials.json
-          json: ${{ secrets.CREDENTIAL_JSON }}
-          dir: ~/.pub-cache/
+      - name: Run inject credential
+        env:
+          CREDENTIAL: ${{ secrets.CREDENTIAL_JSON }}
+        run: |
+          # cat ~/flutter/.pub-cache/credentials.json | base64
+          mkdir -p ~/.pub-cache
+          echo $CREDENTIAL | base64 -d > ~/.pub-cache/credentials.json
       - run: flutter --version
       - run: flutter pub get
       - run: flutter format --dry-run --set-exit-if-changed .
