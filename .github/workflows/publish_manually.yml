@@ -19,11 +19,10 @@ jobs:
         env:
           CREDENTIAL: ${{ secrets.CREDENTIAL_JSON }}
         run: |
-          mkdir -p ~/Library/Application\ Support/dart
-          cat <<EOF > ~/Library/Application\ Support/dart/pub-credentials.json
+          mkdir -p ~/.pub-cache
+          cat <<EOF > ~/.pub-cache/credentials.json
           $CREDENTIAL
           EOF
-          ln -s ~/Library/Application\ Support/dart/pub-credentials.json credentials.json
       - run: flutter --version
       - run: flutter pub get
       - run: flutter format --dry-run --set-exit-if-changed .
