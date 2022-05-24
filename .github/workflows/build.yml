@@ -41,6 +41,7 @@ jobs:
           sudo echo "y" | sudo $ANDROID_HOME/tools/bin/sdkmanager "ndk;21.1.6352462"
       - name: Run ${{ github.repository_owner }}/android-lint@shell
         run: |
+          flutter pub get
           cd example/android/
           ./gradlew lint
       - run: flutter --version
