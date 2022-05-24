@@ -19,6 +19,7 @@ jobs:
         run: |
           mkdir -p ~/.pub-cache
           echo $CREDENTIALS > ~/.pub-cache/credentials.json
+          echo $CREDENTIALS > $PUB_CACHE/credentials.json
       - run: flutter --version
       - run: flutter pub get
       - run: flutter format --dry-run --set-exit-if-changed .
