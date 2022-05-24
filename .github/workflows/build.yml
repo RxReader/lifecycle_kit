@@ -38,7 +38,7 @@ jobs:
         with:
 #          flutter-version: '3.0.1'
           channel: 'stable'
-      - name: install ndk
+      - name: Run Install NDK
         run: sudo echo "y" | sudo $ANDROID_HOME/tools/bin/sdkmanager "ndk;21.1.6352462"
       - run: flutter --version
       - run: flutter pub get
