@@ -14,11 +14,11 @@ jobs:
         with:
           channel: 'stable'
       - name: Run inject credentials
-        with:
-          credentials: ${{ secrets.CREDENTIALS_JSON }}
+        env:
+          CREDENTIALS: ${{ secrets.CREDENTIALS_JSON }}
         run: |
           mkdir -p ~/.pub-cache
-          echo ${INPUT_CREDENTIALS} > ~/.pub-cache/credentials.json
+          echo $CREDENTIALS > ~/.pub-cache/credentials.json
       - run: flutter --version
       - run: flutter pub get
       - run: flutter format --dry-run --set-exit-if-changed .
