@@ -19,10 +19,9 @@ jobs:
         env:
           CREDENTIAL: ${{ secrets.CREDENTIAL_JSON }}
         run: |
-          # cat ~/flutter/.pub-cache/credentials.json | base64
           mkdir -p ~/.pub-cache
-          echo $CREDENTIAL | base64 -d > ~/.pub-cache/credentials.json
+          echo $CREDENTIAL > ~/.pub-cache/credentials.json
       - run: flutter --version
       - run: flutter pub get
       - run: flutter format --dry-run --set-exit-if-changed .
-      - run: flutter pub publish
+      - run: echo "y" | flutter pub publish
