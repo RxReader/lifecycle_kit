@@ -18,6 +18,7 @@ jobs:
         env:
           CREDENTIAL: ${{ secrets.CREDENTIAL_JSON }}
         run: |
+#          macos: ~/Library/Application\ Support/dart/pub-credentials.json
           mkdir -p ~/.pub-cache
           echo $CREDENTIAL > ~/.pub-cache/credentials.json
       - run: flutter --version
