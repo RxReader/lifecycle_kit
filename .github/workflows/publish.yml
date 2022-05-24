@@ -4,9 +4,6 @@ on:
   release:
     types: [published]
 
-# macos: ~/Library/Application\ Support/dart/pub-credentials.json
-# linux: ~/.pub-cache/credentials.json
-
 jobs:
   publish:
     name: Publish

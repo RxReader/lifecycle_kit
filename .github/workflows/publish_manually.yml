@@ -2,9 +2,6 @@ name: publish manually
 
 on: workflow_dispatch
 
-# macos: ~/Library/Application\ Support/dart/pub-credentials.json
-# linux: ~/.pub-cache/credentials.json
-
 jobs:
   publish_manually:
     name: Publish Manually
