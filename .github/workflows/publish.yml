@@ -17,8 +17,10 @@ jobs:
         env:
           CREDENTIALS: ${{ secrets.CREDENTIALS_JSON }}
         run: |
-          mkdir -p ~/.pub-cache
-          echo $CREDENTIALS > ~/.pub-cache/credentials.json
+          if [ -z $PUB_CACHE ];then
+            PUB_CACHE=~/.pub-cache
+          fi
+          mkdir -p $PUB_CACHE
           echo $CREDENTIALS > $PUB_CACHE/credentials.json
       - run: flutter --version
       - run: flutter pub get
