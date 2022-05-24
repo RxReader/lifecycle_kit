@@ -39,6 +39,10 @@ jobs:
       - name: Run ${{ github.repository_owner }}/install-ndk@shell
         run: |
           sudo echo "y" | sudo $ANDROID_HOME/tools/bin/sdkmanager "ndk;21.1.6352462"
+      - name: Run ${{ github.repository_owner }}/android-lint@shell
+        run: |
+          cd example/android/
+          ./gradlew lint
       - run: flutter --version
       - run: flutter pub get
       - run: flutter format --dry-run --set-exit-if-changed .
