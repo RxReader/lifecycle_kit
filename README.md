@@ -1,8 +1,7 @@
 # lifecycle_kit
 
-[![GitHub Tag](https://img.shields.io/github/tag/rxreader/lifecycle_kit.svg)](https://github.com/rxreader/lifecycle_kit/releases)
-[![Pub Package](https://img.shields.io/pub/v/lifecycle_kit.svg)](https://pub.dartlang.org/packages/lifecycle_kit)
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/rxreader/lifecycle_kit/blob/master/LICENSE)
+[![Pub Package](https://img.shields.io/pub/v/lifecycle_kit.svg)](https://pub.dev/packages/lifecycle_kit)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/RxReader/lifecycle_kit/blob/master/LICENSE)
 
 A powerful package for Flutter.
 
