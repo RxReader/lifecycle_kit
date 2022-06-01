@@ -1,5 +1,6 @@
 import 'package:example/app/app.manifest.g.dart';
 import 'package:example/pages/not_found/not_found_page.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -24,11 +25,12 @@ mixin InterceptableRouter on ra.Router {
   }
 
   @override
-  void useRoute(
-      {required String name,
-      required String routeName,
-      required WidgetBuilder routeBuilder,
-      Interceptor? interceptor}) {
+  void useRoute({
+    required String name,
+    required String routeName,
+    required WidgetBuilder routeBuilder,
+    Interceptor? interceptor,
+  }) {
     assert(!_routeInterceptors.containsKey(routeName));
     super
         .useRoute(name: name, routeName: routeName, routeBuilder: routeBuilder);
@@ -38,7 +40,10 @@ mixin InterceptableRouter on ra.Router {
   }
 
   @override
-  void useController({required dynamic controller, Interceptor? interceptor}) {
+  void useController({
+    required dynamic controller,
+    Interceptor? interceptor,
+  }) {
     final ra.Controller wrapper = ra.Controller.from(controller);
     useRoute(
       name: wrapper.name,
@@ -48,8 +53,11 @@ mixin InterceptableRouter on ra.Router {
     );
   }
 
-  Future<Object?> pushNamed(BuildContext context, String routeName,
-      {Object? arguments}) {
+  Future<Object?> pushNamed(
+    BuildContext context,
+    String routeName, {
+    Object? arguments,
+  }) {
     final List<Interceptor> activeInterceptors = <Interceptor>[
       ..._interceptors,
       if (_routeInterceptors.containsKey(routeName))
@@ -66,8 +74,12 @@ mixin InterceptableRouter on ra.Router {
     return nexts.last.call();
   }
 
-  Future<Object?> pushReplacementNamed(BuildContext context, String routeName,
-      {Object? result, Object? arguments}) {
+  Future<Object?> pushReplacementNamed(
+    BuildContext context,
+    String routeName, {
+    Object? result,
+    Object? arguments,
+  }) {
     final List<Interceptor> activeInterceptors = <Interceptor>[
       ..._interceptors,
       if (_routeInterceptors.containsKey(routeName))
@@ -158,7 +170,7 @@ class AppRouter extends ra.Router with InterceptableRouter, Manifest {
           },
         );
       }
-      return MaterialPageRoute<dynamic>(
+      return CupertinoPageRoute<dynamic>(
         builder: (BuildContext context) =>
             _routeWidget(context, tracker, settings.name),
         settings: settings,
@@ -169,7 +181,7 @@ class AppRouter extends ra.Router with InterceptableRouter, Manifest {
 
   Route<dynamic>? onUnknownRoute(
       RouteSettings settings, LifecycleTracker tracker) {
-    return MaterialPageRoute<dynamic>(
+    return CupertinoPageRoute<dynamic>(
       builder: (BuildContext context) =>
           _routeWidget(context, tracker, NotFoundPageProvider.routeName),
       settings: settings,
