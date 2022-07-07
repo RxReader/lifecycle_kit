@@ -51,7 +51,7 @@ class AppState extends State<App> {
       // }
       if (kDebugMode) {
         print(
-            'Analytics#onInactive - ${route.settings.name} - ${AppRouter.instance.names[route.settings.name] ?? (route.settings.isLifecyclePage ? route.settings.lifecyclePageName : null)}');
+            'Analytics#onActive - ${route.settings.name} - ${AppRouter.instance.names[route.settings.name] ?? (route.settings.isLifecyclePage ? route.settings.lifecyclePageName : null)}');
       }
     },
     onInactive: (Route<dynamic> route) {
