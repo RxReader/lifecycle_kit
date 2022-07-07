@@ -1,6 +1,8 @@
 import 'package:example/app/app_router.dart';
-import 'package:example/app/router.dart';
 import 'package:example/pages/home/home_page.dart';
+import 'package:example/pages/profile/profile_page.dart';
+import 'package:example/pages/todo/todo_page.dart';
+import 'package:example/widgets/lifecycle.dart';
 import 'package:example/widgets/routes.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -31,17 +33,19 @@ class App extends StatefulWidget {
 class AppState extends State<App> {
   static const List<String> _tabRoutes = <String>[
     HomePageProvider.routeName,
+    TodoPageProvider.routeName,
+    ProfilePageProvider.routeName,
   ];
 
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
-  final LifecycleTracker _tracker = RouteTracker(
+  final LifecycleTracker _tracker = LifecycleFuncTracker(
     onActive: (Route<dynamic> route) {
       if (route.settings.name?.isEmpty ?? true) {
         return;
       }
-      if (!AppRouter.instance.names.containsKey(route.settings.name)) {
-        return;
-      }
+      // if (!AppRouter.instance.names.containsKey(route.settings.name)) {
+      //   return;
+      // }
       if (_tabRoutes.contains(route.settings.name)) {
         return;
       }
@@ -54,9 +58,9 @@ class AppState extends State<App> {
       if (route.settings.name?.isEmpty ?? true) {
         return;
       }
-      if (!AppRouter.instance.names.containsKey(route.settings.name)) {
-        return;
-      }
+      // if (!AppRouter.instance.names.containsKey(route.settings.name)) {
+      //   return;
+      // }
       if (_tabRoutes.contains(route.settings.name)) {
         return;
       }
@@ -91,7 +95,7 @@ class AppState extends State<App> {
         //   tracker: _tracker,
         // ),
         LifecycleRouteObserver<Route<dynamic>>(
-          tracker: RouteTracker(
+          tracker: LifecycleFuncTracker(
             onInactive: (Route<dynamic> route) =>
                 _tracker.trackInactive(route: route),
           ),
@@ -99,7 +103,7 @@ class AppState extends State<App> {
         _routeObserver,
         _powerfulRouteObserver,
         LifecycleRouteObserver<Route<dynamic>>(
-          tracker: RouteTracker(
+          tracker: LifecycleFuncTracker(
             onActive: (Route<dynamic> route) =>
                 _tracker.trackActive(route: route),
           ),

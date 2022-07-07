@@ -1,7 +1,28 @@
 import 'package:example/widgets/routes.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lifecycle_kit/lifecycle_kit.dart';
+
+class LifecycleFuncTracker implements LifecycleTracker {
+  const LifecycleFuncTracker({
+    this.onActive,
+    this.onInactive,
+  });
+
+  final void Function(Route<dynamic> route)? onActive;
+  final void Function(Route<dynamic> route)? onInactive;
+
+  @override
+  void trackActive({required Route<dynamic> route}) {
+    onActive?.call(route);
+  }
+
+  @override
+  void trackInactive({required Route<dynamic> route}) {
+    onInactive?.call(route);
+  }
+}
 
 class LifecyclePage {
   const LifecyclePage({
@@ -41,13 +62,30 @@ class LifecyclePageView extends StatefulWidget {
 
 class _LifecyclePageViewState extends State<LifecyclePageView>
     with PowerfulRouteAware, WidgetsBindingObserver {
+  late final LifecycleTracker _tracker = LifecycleFuncTracker(
+    onActive: (Route<dynamic> route) {
+      widget.tracker.trackActive(route: route);
+      final int index = _pageRoutes!.indexOf(route);
+      _extraActiveTracker[index]?.call();
+    },
+    onInactive: (Route<dynamic> route) {
+      widget.tracker.trackInactive(route: route);
+      final int index = _pageRoutes!.indexOf(route);
+      _extraInactiveTracker[index]?.call();
+    },
+  );
   //
   late int _selectedIndex = widget.controller.initialPage;
 
   //
-  ModalRoute<dynamic>? _route;
-  List<ModalRoute<dynamic>>? _pageRoutes;
+  Route<dynamic>? _route;
+  List<Route<dynamic>>? _pageRoutes;
   PowerfulRouteObserver<Route<dynamic>>? _routeObserver;
+  //
+  _LifecyclePageViewState? _ancestor;
+  IndexedSemantics? _indexed;
+  final Map<int, VoidCallback> _extraActiveTracker = <int, VoidCallback>{};
+  final Map<int, VoidCallback> _extraInactiveTracker = <int, VoidCallback>{};
 
   @override
   void initState() {
@@ -68,11 +106,41 @@ class _LifecyclePageViewState extends State<LifecyclePageView>
       );
     }).toList();
     _routeObserver ??= widget.routeObserver..subscribe(this, _route!);
+    _updateAncestor(); // 要晚于 routeObserver.subscribe
+  }
+
+  void _updateAncestor() {
+    final _LifecyclePageViewState? newAncestor =
+        context.findAncestorStateOfType<_LifecyclePageViewState>();
+    if (newAncestor == _ancestor) {
+      return;
+    }
+    if (_ancestor != null) {
+      final int index = _indexed!.index;
+      _ancestor!._extraActiveTracker.remove(index);
+      _ancestor!._extraInactiveTracker.remove(index);
+    }
+    _ancestor = newAncestor;
+    if (_ancestor != null) {
+      _indexed = context.findAncestorWidgetOfExactType<IndexedSemantics>();
+      final int index = _indexed!.index;
+      _ancestor!._extraActiveTracker[index] = () {
+        _tracker.trackActive(route: _pageRoutes![_selectedIndex]);
+      };
+      _ancestor!._extraInactiveTracker[index] = () {
+        _tracker.trackInactive(route: _pageRoutes![_selectedIndex]);
+      };
+    }
   }
 
   @override
   void dispose() {
     _routeObserver?.unsubscribe(this);
+    if (_ancestor != null) {
+      final int index = _indexed!.index;
+      _ancestor!._extraActiveTracker.remove(index);
+      _ancestor!._extraInactiveTracker.remove(index);
+    }
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
@@ -83,7 +151,7 @@ class _LifecyclePageViewState extends State<LifecyclePageView>
   void didPush() {
     // super.didPush();
     if (_route?.isCurrent ?? false) {
-      widget.tracker.trackActive(route: _pageRoutes![_selectedIndex]);
+      _tracker.trackActive(route: _pageRoutes![_selectedIndex]);
     }
   }
 
@@ -91,7 +159,9 @@ class _LifecyclePageViewState extends State<LifecyclePageView>
   void didPushNext() {
     // super.didPushNext();
     // if (_route?.isCurrent ?? false) {// false
-    widget.tracker.trackInactive(route: _pageRoutes![_selectedIndex]);
+    if (_ancestor == null) {
+      _tracker.trackInactive(route: _pageRoutes![_selectedIndex]);
+    }
     // }
   }
 
@@ -99,7 +169,9 @@ class _LifecyclePageViewState extends State<LifecyclePageView>
   void didPopNext() {
     // super.didPopNext();
     // if (_route?.isCurrent ?? false) {// true
-    widget.tracker.trackActive(route: _pageRoutes![_selectedIndex]);
+    if (_ancestor == null) {
+      _tracker.trackActive(route: _pageRoutes![_selectedIndex]);
+    }
     // }
   }
 
@@ -107,7 +179,9 @@ class _LifecyclePageViewState extends State<LifecyclePageView>
   void didPop() {
     // super.didPop();
     // if (_route?.isCurrent ?? false) {
-    widget.tracker.trackInactive(route: _pageRoutes![_selectedIndex]);
+    if (_ancestor == null) {
+      _tracker.trackInactive(route: _pageRoutes![_selectedIndex]);
+    }
     // }
   }
 
@@ -115,7 +189,9 @@ class _LifecyclePageViewState extends State<LifecyclePageView>
   void didRemove(Route<dynamic>? previousRoute) {
     // super.didRemove(previousRoute);
     if (previousRoute?.isCurrent ?? false) {
-      widget.tracker.trackInactive(route: _pageRoutes![_selectedIndex]);
+      if (_ancestor == null) {
+        _tracker.trackInactive(route: _pageRoutes![_selectedIndex]);
+      }
     }
   }
 
@@ -123,7 +199,9 @@ class _LifecyclePageViewState extends State<LifecyclePageView>
   void didReplace({Route<dynamic>? newRoute}) {
     // super.didReplace(newRoute: newRoute);
     if (newRoute?.isCurrent ?? false) {
-      widget.tracker.trackInactive(route: _pageRoutes![_selectedIndex]);
+      if (_ancestor == null) {
+        _tracker.trackInactive(route: _pageRoutes![_selectedIndex]);
+      }
     }
   }
 
@@ -133,11 +211,13 @@ class _LifecyclePageViewState extends State<LifecyclePageView>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     // super.didChangeAppLifecycleState(state);
     if (_route?.isCurrent ?? false) {
-      if (state == AppLifecycleState.resumed) {
-        widget.tracker.trackActive(route: _pageRoutes![_selectedIndex]);
-      } else if (state == AppLifecycleState.inactive) {
-        // AppLifecycleState.paused
-        widget.tracker.trackInactive(route: _pageRoutes![_selectedIndex]);
+      if (_ancestor == null) {
+        if (state == AppLifecycleState.resumed) {
+          _tracker.trackActive(route: _pageRoutes![_selectedIndex]);
+        } else if (state == AppLifecycleState.inactive) {
+          // AppLifecycleState.paused
+          _tracker.trackInactive(route: _pageRoutes![_selectedIndex]);
+        }
       }
     }
   }
@@ -160,8 +240,10 @@ class _LifecyclePageViewState extends State<LifecyclePageView>
   void _onPageChanged(int index) {
     if (_selectedIndex != index) {
       if (_route?.isCurrent ?? false) {
-        widget.tracker.trackInactive(route: _pageRoutes![_selectedIndex]);
-        widget.tracker.trackActive(route: _pageRoutes![index]);
+        if (_ancestor == null || _ancestor!._selectedIndex == _indexed!.index) {
+          _tracker.trackInactive(route: _pageRoutes![_selectedIndex]);
+          _tracker.trackActive(route: _pageRoutes![index]);
+        }
       }
       _selectedIndex = index;
     }

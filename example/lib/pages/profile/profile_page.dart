@@ -1,3 +1,7 @@
+import 'package:example/app/app.dart';
+import 'package:example/app/app_router.dart';
+import 'package:example/pages/test/test_page.dart';
+import 'package:example/widgets/lifecycle.dart';
 import 'package:flutter/material.dart';
 import 'package:router_annotation/router_annotation.dart' as rca;
 
@@ -29,6 +33,44 @@ class _ProfilePageState extends State<ProfilePage>
     return Scaffold(
       appBar: AppBar(
         title: Text('我的'),
+      ),
+      body: LifecyclePageView(
+        tracker: App.of(context).tracker,
+        routeObserver: App.of(context).powerfulRouteObserver,
+        pages: <LifecyclePage>[
+          LifecyclePage(
+            routeName: '${ProfilePageProvider.routeName}/1',
+            routeBuilder: (BuildContext context) {
+              return ListView(
+                children: <Widget>[
+                  ListTile(
+                    title: Text('Test Profile 1'),
+                    onTap: () {
+                      AppRouter.instance
+                          .pushNamed(context, TestPageProvider.routeName);
+                    },
+                  ),
+                ],
+              );
+            },
+          ),
+          LifecyclePage(
+            routeName: '${ProfilePageProvider.routeName}/2',
+            routeBuilder: (BuildContext context) {
+              return ListView(
+                children: <Widget>[
+                  ListTile(
+                    title: Text('Test Profile 2'),
+                    onTap: () {
+                      AppRouter.instance
+                          .pushNamed(context, TestPageProvider.routeName);
+                    },
+                  ),
+                ],
+              );
+            },
+          ),
+        ],
       ),
     );
   }
