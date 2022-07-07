@@ -66,12 +66,12 @@ class _LifecyclePageViewState extends State<LifecyclePageView>
     onActive: (Route<dynamic> route) {
       widget.tracker.trackActive(route: route);
       final int index = _pageRoutes!.indexOf(route);
-      _extraActiveTracker[index]?.call();
+      _childActiveTracker[index]?.call();
     },
     onInactive: (Route<dynamic> route) {
       widget.tracker.trackInactive(route: route);
       final int index = _pageRoutes!.indexOf(route);
-      _extraInactiveTracker[index]?.call();
+      _childInactiveTracker[index]?.call();
     },
   );
   //
@@ -84,8 +84,8 @@ class _LifecyclePageViewState extends State<LifecyclePageView>
   //
   _LifecyclePageViewState? _ancestor;
   IndexedSemantics? _indexed;
-  final Map<int, VoidCallback> _extraActiveTracker = <int, VoidCallback>{};
-  final Map<int, VoidCallback> _extraInactiveTracker = <int, VoidCallback>{};
+  final Map<int, VoidCallback> _childActiveTracker = <int, VoidCallback>{};
+  final Map<int, VoidCallback> _childInactiveTracker = <int, VoidCallback>{};
 
   @override
   void initState() {
@@ -117,17 +117,17 @@ class _LifecyclePageViewState extends State<LifecyclePageView>
     }
     if (_ancestor != null) {
       final int index = _indexed!.index;
-      _ancestor!._extraActiveTracker.remove(index);
-      _ancestor!._extraInactiveTracker.remove(index);
+      _ancestor!._childActiveTracker.remove(index);
+      _ancestor!._childInactiveTracker.remove(index);
     }
     _ancestor = newAncestor;
     if (_ancestor != null) {
       _indexed = context.findAncestorWidgetOfExactType<IndexedSemantics>();
       final int index = _indexed!.index;
-      _ancestor!._extraActiveTracker[index] = () {
+      _ancestor!._childActiveTracker[index] = () {
         _tracker.trackActive(route: _pageRoutes![_selectedIndex]);
       };
-      _ancestor!._extraInactiveTracker[index] = () {
+      _ancestor!._childInactiveTracker[index] = () {
         _tracker.trackInactive(route: _pageRoutes![_selectedIndex]);
       };
     }
@@ -138,8 +138,8 @@ class _LifecyclePageViewState extends State<LifecyclePageView>
     _routeObserver?.unsubscribe(this);
     if (_ancestor != null) {
       final int index = _indexed!.index;
-      _ancestor!._extraActiveTracker.remove(index);
-      _ancestor!._extraInactiveTracker.remove(index);
+      _ancestor!._childActiveTracker.remove(index);
+      _ancestor!._childInactiveTracker.remove(index);
     }
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
