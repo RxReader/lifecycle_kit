@@ -147,6 +147,7 @@ class _LifecyclePageViewState extends State<LifecyclePageView>
     }
     if (_ancestor != null) {
       final int index = _indexed!.index;
+      _indexed = null;
       _ancestor!._childActiveTracker.remove(index);
       _ancestor!._childInactiveTracker.remove(index);
     }
@@ -168,6 +169,7 @@ class _LifecyclePageViewState extends State<LifecyclePageView>
     _routeObserver?.unsubscribe(this);
     if (_ancestor != null) {
       final int index = _indexed!.index;
+      _indexed = null;
       _ancestor!._childActiveTracker.remove(index);
       _ancestor!._childInactiveTracker.remove(index);
     }
