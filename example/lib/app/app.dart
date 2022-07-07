@@ -31,7 +31,7 @@ class App extends StatefulWidget {
 }
 
 class AppState extends State<App> {
-  static const List<String> _tabRoutes = <String>[
+  static const List<String> _kTabRoutes = <String>[
     HomePageProvider.routeName,
     TodoPageProvider.routeName,
     ProfilePageProvider.routeName,
@@ -43,30 +43,30 @@ class AppState extends State<App> {
       if (route.settings.name?.isEmpty ?? true) {
         return;
       }
+      if (_kTabRoutes.contains(route.settings.name)) {
+        return;
+      }
       // if (!AppRouter.instance.names.containsKey(route.settings.name)) {
       //   return;
       // }
-      if (_tabRoutes.contains(route.settings.name)) {
-        return;
-      }
       if (kDebugMode) {
         print(
-            'Analytics#onActive - ${route.settings.name} - ${AppRouter.instance.names[route.settings.name]}');
+            'Analytics#onInactive - ${route.settings.name} - ${AppRouter.instance.names[route.settings.name] ?? (route.settings.isLifecyclePage ? route.settings.lifecyclePageName : null)}');
       }
     },
     onInactive: (Route<dynamic> route) {
       if (route.settings.name?.isEmpty ?? true) {
         return;
       }
+      if (_kTabRoutes.contains(route.settings.name)) {
+        return;
+      }
       // if (!AppRouter.instance.names.containsKey(route.settings.name)) {
       //   return;
       // }
-      if (_tabRoutes.contains(route.settings.name)) {
-        return;
-      }
       if (kDebugMode) {
         print(
-            'Analytics#onInactive - ${route.settings.name} - ${AppRouter.instance.names[route.settings.name]}');
+            'Analytics#onInactive - ${route.settings.name} - ${AppRouter.instance.names[route.settings.name] ?? (route.settings.isLifecyclePage ? route.settings.lifecyclePageName : null)}');
       }
     },
   );

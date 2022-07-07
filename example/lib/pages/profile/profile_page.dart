@@ -39,6 +39,7 @@ class _ProfilePageState extends State<ProfilePage>
         routeObserver: App.of(context).powerfulRouteObserver,
         pages: <LifecyclePage>[
           LifecyclePage(
+            name: 'profile_1',
             routeName: '${ProfilePageProvider.routeName}/1',
             routeBuilder: (BuildContext context) {
               return ListView(
@@ -55,6 +56,7 @@ class _ProfilePageState extends State<ProfilePage>
             },
           ),
           LifecyclePage(
+            name: 'profile_2',
             routeName: '${ProfilePageProvider.routeName}/2',
             routeBuilder: (BuildContext context) {
               return ListView(

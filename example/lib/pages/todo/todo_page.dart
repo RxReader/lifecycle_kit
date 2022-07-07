@@ -39,6 +39,7 @@ class _TodoPageState extends State<TodoPage>
         routeObserver: App.of(context).powerfulRouteObserver,
         pages: <LifecyclePage>[
           LifecyclePage(
+            name: 'todo_1',
             routeName: '${TodoPageProvider.routeName}/1',
             routeBuilder: (BuildContext context) {
               return ListView(
@@ -55,6 +56,7 @@ class _TodoPageState extends State<TodoPage>
             },
           ),
           LifecyclePage(
+            name: 'todo_2',
             routeName: '${TodoPageProvider.routeName}/2',
             routeBuilder: (BuildContext context) {
               return ListView(

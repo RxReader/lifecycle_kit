@@ -43,10 +43,12 @@ class _HomePageState extends State<HomePage> {
         physics: NeverScrollableScrollPhysics(),
         pages: <LifecyclePage>[
           LifecyclePage(
+            name: TodoPageProvider.name,
             routeName: TodoPageProvider.routeName,
             routeBuilder: TodoPageProvider.routeBuilder,
           ),
           LifecyclePage(
+            name: ProfilePageProvider.name,
             routeName: ProfilePageProvider.routeName,
             routeBuilder: ProfilePageProvider.routeBuilder,
           ),

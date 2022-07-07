@@ -26,12 +26,25 @@ class LifecycleFuncTracker implements LifecycleTracker {
 
 class LifecyclePage {
   const LifecyclePage({
+    required this.name,
     required this.routeName,
     required this.routeBuilder,
   });
 
+  final String name;
   final String routeName;
   final WidgetBuilder routeBuilder;
+}
+
+extension LifecyclePageRouteSettings on RouteSettings {
+  bool get isLifecyclePage =>
+      (arguments as Map<String, dynamic>?)
+          ?.containsKey('_lifecycle_page_|_name_') ??
+      false;
+
+  String? get lifecyclePageName =>
+      (arguments as Map<String, dynamic>?)?['_lifecycle_page_|_name_']
+          as String?;
 }
 
 class LifecyclePageView extends StatefulWidget {
@@ -74,6 +87,7 @@ class _LifecyclePageViewState extends State<LifecyclePageView>
       _childInactiveTracker[index]?.call();
     },
   );
+
   //
   late int _selectedIndex = widget.controller.initialPage;
 
@@ -81,6 +95,7 @@ class _LifecyclePageViewState extends State<LifecyclePageView>
   Route<dynamic>? _route;
   List<Route<dynamic>>? _pageRoutes;
   PowerfulRouteObserver<Route<dynamic>>? _routeObserver;
+
   //
   _LifecyclePageViewState? _ancestor;
   IndexedSemantics? _indexed;
@@ -99,7 +114,12 @@ class _LifecyclePageViewState extends State<LifecyclePageView>
     _route ??= ModalRoute.of(context);
     _pageRoutes ??= widget.pages.map((LifecyclePage element) {
       return PageRouteBuilder<dynamic>(
-        settings: _route!.settings.copyWith(name: element.routeName),
+        settings: RouteSettings(
+          name: element.routeName,
+          arguments: <String, dynamic>{
+            '_lifecycle_page_|_name_': element.name,
+          },
+        ),
         pageBuilder: (BuildContext context, Animation<double> animation,
                 Animation<double> secondaryAnimation) =>
             element.routeBuilder.call(context),
