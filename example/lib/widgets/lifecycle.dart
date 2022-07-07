@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lifecycle_kit/lifecycle_kit.dart';
+import 'package:router_api/router_api.dart' as ra;
 
 class LifecycleFuncTracker implements LifecycleTracker {
   const LifecycleFuncTracker({
@@ -30,6 +31,15 @@ class LifecyclePage {
     required this.routeName,
     required this.routeBuilder,
   });
+
+  factory LifecyclePage.fromController(dynamic controller) {
+    final ra.Controller wrapper = ra.Controller.from(controller);
+    return LifecyclePage(
+      name: wrapper.name,
+      routeName: wrapper.routeName,
+      routeBuilder: wrapper.routeBuilder,
+    );
+  }
 
   final String name;
   final String routeName;

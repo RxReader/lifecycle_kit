@@ -41,18 +41,24 @@ class _HomePageState extends State<HomePage> {
         routeObserver: App.of(context).powerfulRouteObserver,
         controller: _controller,
         physics: NeverScrollableScrollPhysics(),
-        pages: <LifecyclePage>[
-          LifecyclePage(
-            name: TodoPageProvider.name,
-            routeName: TodoPageProvider.routeName,
-            routeBuilder: TodoPageProvider.routeBuilder,
-          ),
-          LifecyclePage(
-            name: ProfilePageProvider.name,
-            routeName: ProfilePageProvider.routeName,
-            routeBuilder: ProfilePageProvider.routeBuilder,
-          ),
-        ],
+        // pages: <LifecyclePage>[
+        //   LifecyclePage(
+        //     name: TodoPageProvider.name,
+        //     routeName: TodoPageProvider.routeName,
+        //     routeBuilder: TodoPageProvider.routeBuilder,
+        //   ),
+        //   LifecyclePage(
+        //     name: ProfilePageProvider.name,
+        //     routeName: ProfilePageProvider.routeName,
+        //     routeBuilder: ProfilePageProvider.routeBuilder,
+        //   ),
+        // ],
+        pages: <dynamic>[
+          TodoPageController(),
+          ProfilePageController(),
+        ].map((dynamic element) {
+          return LifecyclePage.fromController(element);
+        }).toList(),
       ),
       bottomNavigationBar: BottomAppBar(
         child: CupertinoTabBar(
